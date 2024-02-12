@@ -1,28 +1,28 @@
 {
-  "info": {
-    "_postman_id": "569821aa-8547-4397-8a5c-6e690f4f37ac",
-    "name": "advanced-company-search-consumer",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "7646296"
-  },
-  "item": [
-    {
-      "name": "health check",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/advanced-company-search-consumer/healthcheck",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "advanced-company-search-consumer",
-            "healthcheck"
-          ]
+    "info": {
+        "_postman_id": "569821aa-8547-4397-8a5c-6e690f4f37ac",
+        "name": "advanced-company-search-consumer",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "7646296"
+    },
+    "item": [
+        {
+            "name": "health check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/advanced-company-search-consumer/healthcheck",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "advanced-company-search-consumer",
+                        "healthcheck"
+                    ]
+                }
+            },
+            "response": []
         }
-      },
-      "response": []
-    }
-  ]
+    ]
 }

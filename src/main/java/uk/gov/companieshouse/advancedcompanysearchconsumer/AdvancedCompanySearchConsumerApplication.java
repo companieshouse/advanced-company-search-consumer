@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AdvancedCompanySearchConsumerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AdvancedCompanySearchConsumerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AdvancedCompanySearchConsumerApplication.class, args);
+    }
 
 }
