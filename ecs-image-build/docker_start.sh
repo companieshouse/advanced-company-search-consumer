@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Start script for alphabetical-company-search-consumer
+# Start script for advanced-company-search-consumer
 
 PORT=8080
 
