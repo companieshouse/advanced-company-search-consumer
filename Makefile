@@ -16,6 +16,10 @@ test: test-unit
 test-unit:
 	mvn test
 
+.PHONY: test-integration
+test-integration: clean
+	mvn test -Dgroups="unit-test, integration-test"
+
 .PHONY: package
 package:
 ifndef version
