@@ -18,6 +18,9 @@
         <spring-boot-dependencies.version>3.2.2</spring-boot-dependencies.version>
         <spring-boot-maven-plugin.version>3.2.2</spring-boot-maven-plugin.version>
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -66,6 +69,22 @@
                         <image>416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-corretto-build-21</image>
                     </from>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+           </plugin>
+            <plugin>
+                <!-- to use Maven Junit test groups correctly -->
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-surefire-plugin</artifactId>
+                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
