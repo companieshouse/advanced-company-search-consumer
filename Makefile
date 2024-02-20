@@ -1,3 +1,6 @@
+artifact_name       := advanced-company-search-consumer
+version             := unversioned
+
 .PHONY: all
 all: build
 
@@ -28,6 +31,10 @@ endif
 	$(info Packaging version: $(version))
 	mvn versions:set -DnewVersion=$(version) -DgenerateBackupPoms=false
 	mvn package -DskipTests=true
+	$(eval tmpdir:=$(shell mktemp -d build-XXXXXXXXXX))
+	cp ./target/$(artifact_name)-$(version).jar $(tmpdir)/$(artifact_name).jar
+	cd $(tmpdir); zip -r ../$(artifact_name)-$(version).zip *
+	rm -rf $(tmpdir)
 
 .PHONY: dist
 dist: clean package
