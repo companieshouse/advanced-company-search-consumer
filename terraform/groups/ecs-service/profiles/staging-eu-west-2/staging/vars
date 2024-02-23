@@ -2,5 +2,14 @@ environment = "staging"
 aws_profile = "staging-eu-west-2"
 
 # service configs
-use_set_environment_files = true
 log_level = "trace"
+human_log = "1"
+
+backoff_delay = "30000"
+concurrent_listener_instances = "1"
+group_id = "advanced-company-search-consumer-group"
+max_attempts = "4"
+server_port = "8080"
+topic = "stream-company-profile"
+
+use_set_environment_files = true
