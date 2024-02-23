@@ -28,3 +28,7 @@ replay_pid*
 # Finder files (Mac)
 .DS_Store
 ._*
+
+# IDE
+.idea/
+.vscode/
