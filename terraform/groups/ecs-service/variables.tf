@@ -15,7 +15,47 @@ variable "aws_profile" {
   type        = string
   description = "The AWS profile to use for deployment."
 }
-
+variable "human_log" {
+  default     = 0
+  type        = number
+  description = "Where human-friendly logging is enabled or not."
+}
+# Kafka consumer configuration
+variable "backoff_delay" {
+  default   = 30000
+  type      = number
+  description = "The delay in milliseconds between message republish attempts."
+}
+variable "bootstrap_server_url" {
+  default   = ""
+  type      = string
+  description = "The URLs of the Kafka brokers that the consumers will connect to."
+}
+variable "concurrent_listener_instances" {
+  default   = 1
+  type      = number
+  description = "The number of consumers that should participate in the consumer group. Must be equal to the number of main topic partitions."
+}
+variable "group_id" {
+  default   = "advanced-company-search-consumer-group"
+  type      = string
+  description = "The group ID of the main consumer."
+}
+variable "max_attempts" {
+  default   = 4
+  type      = number
+  description = "The maximum number of times messages will be processed before they are sent to the dead letter topic."
+}
+variable "server_port" {
+    default   = 8080
+    type      = number
+    description = "Port this application runs on."
+}
+variable "topic" {
+  default   = "stream-company-profile"
+  type      = string
+  description = "The topic from which the main consumer will consume messages."
+}
 # ------------------------------------------------------------------------------
 # Docker Container
 # ------------------------------------------------------------------------------
@@ -110,7 +150,7 @@ variable "use_set_environment_files" {
 
 variable "advanced_company_search_consumer_version" {
   type        = string
-  description = "The version of the advanced-company-search-consumer-version container to run."
+  description = "The version of the advanced-company-search-consumer container to run."
 }
 
 variable "log_level" {
