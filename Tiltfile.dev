@@ -1,7 +1,7 @@
 local_resource(
   name = 'dev:advanced-company-search-consumer-build',
   cmd = 'mvn clean compile',
-  deps = ['src']
+  deps = ['src/main']
 )
 custom_build(
   ref = '416670754337.dkr.ecr.eu-west-2.amazonaws.com/advanced-company-search-consumer',
