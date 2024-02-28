@@ -23,6 +23,68 @@
                 }
             },
             "response": []
+        },
+		{
+			"name": "trigger company profile updates (via chs-kafka-api)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resource_uri\": \"/company/00006400\",\n    \"resource_kind\": \"company-profile\",\n    \"context_id\": \"22-usZuMZEnZY6W_Kip1539964678\",\n    \"event\": {\n        \"published_at\": \"1453896193333\",\n        \"type\": \"changed\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/private/resource-changed",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"private",
+						"resource-changed"
+					]
+				}
+			},
+			"response": []
         }
+    ],
+    "auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
     ]
 }
