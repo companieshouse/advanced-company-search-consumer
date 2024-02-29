@@ -1,8 +1,8 @@
-environment = "cidev"
-aws_profile = "development-eu-west-2"
+environment = "live"
+aws_profile = "live-eu-west-2"
 
 # service configs
-log_level = "debug"
+log_level = "trace"
 human_log = "1"
 
 backoff_delay = "30000"
