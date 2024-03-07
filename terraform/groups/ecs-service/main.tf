@@ -48,6 +48,12 @@ module "ecs-service" {
   health_check_grace_period_seconds = 240
   healthcheck_healthy_threshold     = "2"
 
+  # Disable cloudwatch alarms that are dependant on loadbalancer
+  cloudwatch_unhealthy_host_count_enabled = false
+  cloudwatch_healthy_host_count_enabled   = false
+  cloudwatch_response_time_enabled        = false
+  cloudwatch_http_5xx_error_count_enabled = false
+
   # Docker container details
   docker_registry   = var.docker_registry
   docker_repo       = local.docker_repo
