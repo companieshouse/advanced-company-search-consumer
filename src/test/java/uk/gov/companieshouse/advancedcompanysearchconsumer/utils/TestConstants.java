@@ -16,6 +16,8 @@ public class TestConstants {
 
     public static final ResourceChangedData DELETE_PAYLOAD;
 
+    public static final ResourceChangedData WRONG_EVENT_TYPE_PAYLOAD;
+
     static {
         try {
             UPDATE = ResourceChangedData.newBuilder()
@@ -41,6 +43,17 @@ public class TestConstants {
                     .setData("")
                     .setEvent(getEvent("deleted"))
                     .build();
+    }
+
+    static {
+        WRONG_EVENT_TYPE_PAYLOAD = ResourceChangedData.newBuilder()
+                .setResourceId("00006400")
+                .setResourceKind("company-profile")
+                .setResourceUri("/company/00006400")
+                .setContextId("22-usZuMZEnZY6W_Kip1539964678")
+                .setData("")
+                .setEvent(getEvent("wrong"))
+                .build();
     }
 
     private static EventRecord getEvent(String type) {
