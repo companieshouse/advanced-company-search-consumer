@@ -119,6 +119,6 @@ class AdvancedIndexUpdaterServiceTest {
         doThrow(URIValidationException.class).when(advancedIndexDeleteService).deleteCompanyFromAdvancedIndex(anyString());
 
         // When, Then
-        assertThrows(UnretryableException.class, () -> advancedIndexUpdaterService.processMessage(serviceParameters));
+        assertThrows(NonRetryableException.class, () -> advancedIndexUpdaterService.processMessage(serviceParameters));
     }
 }
