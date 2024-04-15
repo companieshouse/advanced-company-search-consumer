@@ -15,13 +15,13 @@ import uk.gov.companieshouse.logging.Logger;
  * REST request it dispatches to update the ElasticSearch advanced company search index.
  */
 @Component
-public class AdvancedIndexUpdaterService implements Service {
+public class AdvancedIndexService implements Service {
 
     private final Logger logger;
 
     private final AdvancedIndexDeleteService advancedIndexDeleteService;
 
-    public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService) {
+    public AdvancedIndexService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService) {
         this.logger = logger;
         this.advancedIndexDeleteService = advancedIndexDeleteService;
     }
