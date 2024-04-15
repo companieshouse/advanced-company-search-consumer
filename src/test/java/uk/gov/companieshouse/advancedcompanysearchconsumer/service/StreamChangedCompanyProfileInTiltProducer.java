@@ -31,7 +31,7 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 @TestPropertySource(locations = "classpath:stream-company-profile-in-tilt.properties")
 @Import(TestKafkaConfig.class)
 @SuppressWarnings("squid:S3577") // This is NOT to be run as part of an automated test suite.
-class StreamCompanyProfileInTiltProducer {
+class StreamChangedCompanyProfileInTiltProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
         "StreamCompanyProfileInTiltProducer");
