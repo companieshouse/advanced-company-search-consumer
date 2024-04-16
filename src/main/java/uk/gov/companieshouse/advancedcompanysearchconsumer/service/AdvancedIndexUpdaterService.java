@@ -52,7 +52,7 @@ public class AdvancedIndexUpdaterService implements Service {
                     break;
                 default:
                     logger.error(String.format("NonRetryable error occurred, unknown message type of %s", messageType));
-                    throw new Exception("AdvancedIndexUpdaterService unknown message type.");
+                    throw new IllegalArgumentException("AdvancedIndexUpdaterService unknown message type.");
             }
         }catch (ApiErrorResponseException apiException) {
             logger.error(String.format("Error response from INTERNAL API: %s", apiException));
