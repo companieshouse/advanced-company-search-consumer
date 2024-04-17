@@ -14,6 +14,10 @@ public class TestConstants {
 
     public static final ResourceChangedData UPDATE;
 
+    public static final ResourceChangedData DELETE_PAYLOAD;
+
+    public static final ResourceChangedData WRONG_EVENT_TYPE_PAYLOAD;
+
     static {
         try {
             UPDATE = ResourceChangedData.newBuilder()
@@ -23,17 +27,39 @@ public class TestConstants {
                 .setContextId("22-usZuMZEnZY6W_Kip1539964678")
                 .setData(IOUtils.resourceToString("/fixtures/resource-changed-data-data.json",
                     StandardCharsets.UTF_8))
-                .setEvent(getEvent())
+                .setEvent(getEvent("changed"))
                 .build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static EventRecord getEvent() {
+    static {
+            DELETE_PAYLOAD = ResourceChangedData.newBuilder()
+                    .setResourceId("00006400")
+                    .setResourceKind("company-profile")
+                    .setResourceUri("/company/00006400")
+                    .setContextId("22-usZuMZEnZY6W_Kip1539964678")
+                    .setData("")
+                    .setEvent(getEvent("deleted"))
+                    .build();
+    }
+
+    static {
+        WRONG_EVENT_TYPE_PAYLOAD = ResourceChangedData.newBuilder()
+                .setResourceId("00006400")
+                .setResourceKind("company-profile")
+                .setResourceUri("/company/00006400")
+                .setContextId("22-usZuMZEnZY6W_Kip1539964678")
+                .setData("")
+                .setEvent(getEvent("wrong"))
+                .build();
+    }
+
+    private static EventRecord getEvent(String type) {
         return EventRecord.newBuilder()
             .setPublishedAt("1453896193333")
-            .setType("changed")
+            .setType(type)
             .setFieldsChanged(emptyList())
             .build();
     }
