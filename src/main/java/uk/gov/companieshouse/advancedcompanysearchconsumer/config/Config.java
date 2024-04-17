@@ -35,6 +35,9 @@ import uk.gov.companieshouse.logging.util.DataMap;
 import uk.gov.companieshouse.service.ServiceResultStatus;
 import uk.gov.companieshouse.service.rest.response.ResponseEntityFactory;
 import uk.gov.companieshouse.stream.ResourceChangedData;
+import uk.gov.companieshouse.api.InternalApiClient;
+import uk.gov.companieshouse.api.http.ApiKeyHttpClient;
+import java.util.function.Supplier;
 
 @Configuration
 @EnableKafka
@@ -123,5 +126,17 @@ public class Config {
     @Bean
     Logger getLogger() {
         return LoggerFactory.getLogger(NAMESPACE);
+    }
+
+    @Bean
+    Supplier<InternalApiClient> internalApiClientSupplier(
+            @Value("${api.chs-api-key}") String apiKey,
+            @Value("${api.chs-api-url}") String apiUrl) {
+        return () -> {
+            InternalApiClient internalApiClient = new InternalApiClient(new ApiKeyHttpClient(
+                    apiKey));
+            internalApiClient.setBasePath(apiUrl);
+            return internalApiClient;
+        };
     }
 }
