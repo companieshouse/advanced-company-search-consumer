@@ -15,6 +15,7 @@ public class EnvironmentVariablesChecker {
     public enum RequiredEnvironmentVariables {
         BACKOFF_DELAY("BACKOFF_DELAY"),
         BOOTSTRAP_SERVER_URL("BOOTSTRAP_SERVER_URL"),
+        CHS_API_KEY("CHS_API_KEY"),
         CONCURRENT_LISTENER_INSTANCES("CONCURRENT_LISTENER_INSTANCES"),
         GROUP_ID("GROUP_ID"),
         MAX_ATTEMPTS("MAX_ATTEMPTS"),
