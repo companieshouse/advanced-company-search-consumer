@@ -21,9 +21,15 @@ public class AdvancedIndexUpdaterService implements Service {
 
     private final AdvancedIndexDeleteService advancedIndexDeleteService;
 
-    public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService) {
+    private final AdvancedIndexUpsertService advancedIndexUpsertService;
+
+    private final CompanyProfileDeserialiser companyProfileDeserialiser;
+
+    public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService, AdvancedIndexUpsertService advancedIndexUpsertService, CompanyProfileDeserialiser companyProfileDeserialiser) {
         this.logger = logger;
         this.advancedIndexDeleteService = advancedIndexDeleteService;
+        this.advancedIndexUpsertService = advancedIndexUpsertService;
+        this.companyProfileDeserialiser = companyProfileDeserialiser;
     }
 
     @Override
@@ -45,6 +51,7 @@ public class AdvancedIndexUpdaterService implements Service {
             switch (messageType) {
                 case "changed":
                     logger.debug("This is a 'changed' type message.");
+                    advancedIndexUpsertService.upsertCompanyProfileService(message);
                     break;
                 case "deleted":
                     logger.debug("This is a 'deleted' type message.");
