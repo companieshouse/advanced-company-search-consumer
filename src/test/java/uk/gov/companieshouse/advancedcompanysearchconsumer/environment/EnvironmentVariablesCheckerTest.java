@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.BACKOFF_DELAY;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.BOOTSTRAP_SERVER_URL;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.CHS_API_KEY;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.CONCURRENT_LISTENER_INSTANCES;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.GROUP_ID;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.EnvironmentVariablesChecker.RequiredEnvironmentVariables.MAX_ATTEMPTS;
@@ -48,6 +49,12 @@ class EnvironmentVariablesCheckerTest {
     @Test
     void checkEnvironmentVariablesAllPresentReturnsFalseIfBootstrapServerUrlMissing() throws Exception {
         populateAllVariablesExceptOneAndAssertSomethingMissing(BOOTSTRAP_SERVER_URL);
+    }
+
+    @DisplayName("returns false if CHS_API_KEY is missing")
+    @Test
+    void checkEnvironmentVariablesAllPresentReturnsFalseIfChsApiKeyMissing() throws Exception {
+        populateAllVariablesExceptOneAndAssertSomethingMissing(CHS_API_KEY);
     }
 
     @DisplayName("returns false if CONCURRENT_LISTENER_INSTANCES is missing")
