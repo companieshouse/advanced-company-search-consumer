@@ -37,6 +37,9 @@ class AdvancedIndexUpdaterServiceTest {
     @Mock
     private AdvancedIndexDeleteService advancedIndexDeleteService;
 
+    @Mock
+    private AdvancedIndexUpsertService advancedIndexUpsertService;
+
     @InjectMocks
     private AdvancedIndexUpdaterService advancedIndexUpdaterService;
 

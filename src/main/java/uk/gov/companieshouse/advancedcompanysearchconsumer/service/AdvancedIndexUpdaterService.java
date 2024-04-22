@@ -23,13 +23,10 @@ public class AdvancedIndexUpdaterService implements Service {
 
     private final AdvancedIndexUpsertService advancedIndexUpsertService;
 
-    private final CompanyProfileDeserialiser companyProfileDeserialiser;
-
-    public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService, AdvancedIndexUpsertService advancedIndexUpsertService, CompanyProfileDeserialiser companyProfileDeserialiser) {
+    public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService, AdvancedIndexUpsertService advancedIndexUpsertService) {
         this.logger = logger;
         this.advancedIndexDeleteService = advancedIndexDeleteService;
         this.advancedIndexUpsertService = advancedIndexUpsertService;
-        this.companyProfileDeserialiser = companyProfileDeserialiser;
     }
 
     @Override
