@@ -13,6 +13,6 @@ public class ApiClientService {
     }
 
     public InternalApiClient getInternalApiClient() {
-        return ApiSdkManager.getPrivateSDK();
+        return ApiSdkManager.getInternalSDK();
     }
 }
