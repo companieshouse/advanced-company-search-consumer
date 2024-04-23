@@ -23,7 +23,7 @@ locals {
   service_vault_secrets = {
       "bootstrap_server_url" = local.service_secrets["bootstrap_server_url"]
       "vpc_name"             = local.service_secrets["vpc_name"]
-      "chs_internal_api_key"          = local.service_secrets["chs_internal_api_key"]
+      "CHS_API_KEY"          = local.service_secrets["CHS_API_KEY"]
   }
   
   # create a map of secret name => secret arn to pass into ecs service module
