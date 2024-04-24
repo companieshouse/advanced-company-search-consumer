@@ -12,7 +12,7 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompan
 @Component
 public class CompanyProfileDeserialiser {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
+    private static final Logger logger = LoggerFactory.getLogger(NAMESPACE);
 
     private final ObjectMapper objectMapper;
 
@@ -24,7 +24,7 @@ public class CompanyProfileDeserialiser {
         try {
             return objectMapper.readValue(data, CompanyProfileApi.class);
         } catch (JsonProcessingException e) {
-            LOGGER.errorContext( "Unable to parse message payload data", e, null);
+            logger.errorContext( "Unable to parse message payload data", e, null);
             throw new NonRetryableException("Unable to parse message payload data", e);
         }
     }
