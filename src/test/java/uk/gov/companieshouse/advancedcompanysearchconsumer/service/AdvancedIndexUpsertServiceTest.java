@@ -59,11 +59,10 @@ public class AdvancedIndexUpsertServiceTest {
     @BeforeEach
     void setUp(){
 
-        when(companyProfileDeserialiser.deserialiseCompanyProfile(anyString())).thenReturn(companyProfileApi);
         when(apiClientService.getInternalApiClient()).thenReturn(internalApiClient);
         when(internalApiClient.privateSearchResourceHandler()).thenReturn(privateSearchResourceHandler);
         when(privateSearchResourceHandler.advancedCompanySearch()).thenReturn(privateAdvancedCompanySearchHandler);
-        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/", companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
+        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
     }
 
     @Test
@@ -88,13 +87,13 @@ public class AdvancedIndexUpsertServiceTest {
         when(apiClientService.getInternalApiClient()).thenReturn(internalApiClient);
         when(internalApiClient.privateSearchResourceHandler()).thenReturn(privateSearchResourceHandler);
         when(privateSearchResourceHandler.advancedCompanySearch()).thenReturn(privateAdvancedCompanySearchHandler);
-        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/", companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
+        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
 
         advancedIndexUpsertService.upsertCompanyProfileService(resourceChangedData);
 
         // then
         verify(companyProfileDeserialiser).deserialiseCompanyProfile(UPDATE.getData());
-        verify(apiClientService.getInternalApiClient().privateSearchResourceHandler().advancedCompanySearch(), times(1)).upsertCompanyProfile("/advanced-search/companies/", companyProfileApi);
+        verify(apiClientService.getInternalApiClient().privateSearchResourceHandler().advancedCompanySearch(), times(1)).upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi);
     }
 
 }
