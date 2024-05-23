@@ -47,6 +47,7 @@ module "ecs-service" {
   healthcheck_matcher            = local.healthcheck_matcher
   health_check_grace_period_seconds = 240
   healthcheck_healthy_threshold     = "2"
+  healthcheck_unhealthy_threshold   = "5"
 
   # Disable cloudwatch alarms that are dependant on loadbalancer
   cloudwatch_unhealthy_host_count_enabled = false
