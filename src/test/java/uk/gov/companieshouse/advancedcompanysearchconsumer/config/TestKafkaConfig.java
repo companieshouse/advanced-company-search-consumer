@@ -42,7 +42,7 @@ public class TestKafkaConfig {
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest",
                 ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false",
                 ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString()),
             new StringDeserializer(), new AvroDeserializer<>(ResourceChangedData.class));
