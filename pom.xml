@@ -28,15 +28,24 @@
         <system-lambda.version>1.2.1</system-lambda.version>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.integration.tests>false</skip.integration.tests>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml,
-            ${project.build.directory}/site/jacoco-it/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.jacoco.reports>${project.build.directory}/site</sonar.jacoco.reports>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
+			${project.basedir}/target/site/jacoco-it/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
 
         <!-- Docker -->
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
 
-        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
+        <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
+        <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
+		<sonar.login></sonar.login>
+		<sonar.password></sonar.password>
+		<sonar.projectKey>uk.gov.companieshouse:advanced-company-search-consumer</sonar.projectKey>
+		<sonar.projectName>advanced-company-search-consumer</sonar.projectName>
+        <sonar.dependencyCheck.htmlReportPath>
+			${project.basedir}/target/dependency-check-report.html
+		</sonar.dependencyCheck.htmlReportPath>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 
