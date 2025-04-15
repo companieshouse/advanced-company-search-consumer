@@ -41,8 +41,8 @@
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
 		<sonar.login></sonar.login>
 		<sonar.password></sonar.password>
-		<sonar.projectKey>uk.gov.companieshouse:protection-register-app</sonar.projectKey>
-		<sonar.projectName>protection-register-app</sonar.projectName>
+		<sonar.projectKey>uk.gov.companieshouse:advanced-company-search-consumer</sonar.projectKey>
+		<sonar.projectName>advanced-company-search-consumer</sonar.projectName>
         <sonar.dependencyCheck.htmlReportPath>
 			${project.basedir}/target/dependency-check-report.html
 		</sonar.dependencyCheck.htmlReportPath>
