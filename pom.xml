@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.companieshouse</groupId>
         <artifactId>companies-house-parent</artifactId>
-        <version>2.1.11</version>
+        <version>2.1.12</version>
         <relativePath/>
     </parent>
     <artifactId>advanced-company-search-consumer</artifactId>
@@ -43,9 +43,6 @@
 		<sonar.password></sonar.password>
 		<sonar.projectKey>uk.gov.companieshouse:advanced-company-search-consumer</sonar.projectKey>
 		<sonar.projectName>advanced-company-search-consumer</sonar.projectName>
-        <sonar.dependencyCheck.htmlReportPath>
-			${project.basedir}/target/dependency-check-report.html
-		</sonar.dependencyCheck.htmlReportPath>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 
