@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@SpringBootTest
+@SpringBootTest(classes = HealthCheckTest.class)
 @ActiveProfiles("test_main_positive")
 @Import(TestKafkaConfig.class)
 class HealthCheckTest {

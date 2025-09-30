@@ -29,7 +29,7 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
 @ActiveProfiles("test_main_positive")
-class ConsumerPositiveTest extends AbstractKafkaIntegrationTest {
+public class ConsumerPositiveTest extends AbstractKafkaIntegrationTest {
 
     @Autowired
     private KafkaProducer<String, ResourceChangedData> testProducer;

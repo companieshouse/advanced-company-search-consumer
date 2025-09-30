@@ -33,7 +33,7 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
 @ActiveProfiles("test_main_retryable")
-class ConsumerRetryableExceptionTest extends AbstractKafkaIntegrationTest {
+public class ConsumerRetryableExceptionTest extends AbstractKafkaIntegrationTest {
 
     @Autowired
     private KafkaProducer<String, ResourceChangedData> testProducer;

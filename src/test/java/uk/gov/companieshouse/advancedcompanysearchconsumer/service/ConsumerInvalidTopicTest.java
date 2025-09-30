@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
-@SpringBootTest
+@SpringBootTest(classes = ConsumerInvalidTopicTest.class)
 @ActiveProfiles("test_main_nonretryable")
 class ConsumerInvalidTopicTest extends AbstractKafkaIntegrationTest {
 

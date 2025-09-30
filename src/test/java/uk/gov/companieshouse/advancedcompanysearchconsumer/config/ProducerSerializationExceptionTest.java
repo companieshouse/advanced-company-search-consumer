@@ -34,7 +34,7 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
 @ActiveProfiles("test_main_nonretryable")
-class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
+public class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
 
     @Autowired
     private KafkaProducer<String, ResourceChangedData> testProducer;

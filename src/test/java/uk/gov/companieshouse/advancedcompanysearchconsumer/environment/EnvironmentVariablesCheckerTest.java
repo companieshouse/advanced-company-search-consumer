@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
-@SpringBootTest
+@SpringBootTest(classes = EnvironmentVariablesCheckerTest.class)
 @ActiveProfiles("test_main_positive")
 @Import(TestKafkaConfig.class)
 class EnvironmentVariablesCheckerTest {
