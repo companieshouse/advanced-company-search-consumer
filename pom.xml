@@ -45,7 +45,8 @@
 		<sonar.projectName>advanced-company-search-consumer</sonar.projectName>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-
+        <junit-jupiter.version>5.13.4</junit-jupiter.version>
+        <junit-platform.version>1.13.4</junit-platform.version>
     </properties>
 
     <dependencyManagement>
