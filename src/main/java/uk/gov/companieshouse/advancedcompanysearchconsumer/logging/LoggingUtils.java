@@ -2,7 +2,7 @@ package uk.gov.companieshouse.advancedcompanysearchconsumer.logging;
 
 import java.util.Map;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import uk.gov.companieshouse.logging.util.DataMap;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
