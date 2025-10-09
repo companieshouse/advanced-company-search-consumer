@@ -24,9 +24,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.service.AbstractKafkaIntegrationTest;
 import uk.gov.companieshouse.kafka.exceptions.SerializationException;
 import uk.gov.companieshouse.kafka.serialization.AvroSerializer;
@@ -43,7 +43,7 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
     @Autowired
     private CountDownLatch latch;
 
-    @MockitoBean
+    @MockBean
     private AvroSerializer<ResourceChangedData> serializer;
 
     @BeforeEach
