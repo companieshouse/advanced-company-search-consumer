@@ -28,6 +28,7 @@
         <system-lambda.version>1.2.1</system-lambda.version>
         <spring-web.version>6.1.21</spring-web.version>
         <spring-kafka.version>3.3.12</spring-kafka.version>
+        <log4j-api.version>2.25.3</log4j-api.version>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.integration.tests>false</skip.integration.tests>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
@@ -66,6 +67,12 @@
                 <version>${test-containers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+             <!-- CVE-2025-68161(6.3) -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j-api.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
