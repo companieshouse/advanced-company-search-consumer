@@ -124,6 +124,12 @@ variable "service_scaleup_schedule" {
   default     = ""
 }
 
+variable "service_autoscale_scale_out_cooldown" {
+  type        = number
+  description = "Cooldown in seconds for ECS Service scale out (add more tasks)"
+  default     = 300
+}
+
 # ----------------------------------------------------------------------
 # Cloudwatch alerts
 # ----------------------------------------------------------------------
