@@ -7,6 +7,7 @@ import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+
 import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
 @Testcontainers
@@ -15,7 +16,7 @@ public abstract class AbstractKafkaIntegrationTest {
 
     @Container
     protected static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse(
-            "confluentinc/cp-kafka:5.0.0"));
+            "confluentinc/cp-kafka:7.4.0"));
 
     @DynamicPropertySource
     static void props(DynamicPropertyRegistry registry) {
