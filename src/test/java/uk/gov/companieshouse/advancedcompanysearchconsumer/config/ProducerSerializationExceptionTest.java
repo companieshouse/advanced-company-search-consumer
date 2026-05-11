@@ -14,6 +14,7 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtil
 
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -49,12 +50,13 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
     @BeforeEach
     public void drainKafkaTopics() {
         testConsumer.poll(Duration.ofSeconds(1));
+        testConsumer.poll(Duration.ofMillis(500));
     }
 
     @Test
     @DisplayName("SerializationException producing message to DLT causes looping")
     void testPublishToInvalidMessageTopicSerializationException()
-        throws InterruptedException, SerializationException {
+        throws InterruptedException, SerializationException, ExecutionException {
 
         // given
         // Here we only throw the exception twice to allow the test to complete in much less time.
@@ -68,8 +70,8 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
         // when
         testProducer.send(new ProducerRecord<>(MAIN_TOPIC, 0, System.currentTimeMillis(), "key",
             UPDATE));
-        if (!latch.await(5L, TimeUnit.SECONDS)) {
-            fail("Timed out waiting for latch");
+        if (!latch.await(5L, TimeUnit.SECONDS)) { 
+            fail("Timed out waiting for latch"); 
         }
 
         ConsumerRecords<?, ?> consumerRecords = KafkaTestUtils.getRecords(testConsumer,
