@@ -55,7 +55,7 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
     @Test
     @DisplayName("SerializationException producing message to DLT causes looping")
     void testPublishToInvalidMessageTopicSerializationException()
-        throws InterruptedException, SerializationException, ExecutionException {
+        throws InterruptedException, SerializationException {
 
         // given
         // Here we only throw the exception twice to allow the test to complete in much less time.
