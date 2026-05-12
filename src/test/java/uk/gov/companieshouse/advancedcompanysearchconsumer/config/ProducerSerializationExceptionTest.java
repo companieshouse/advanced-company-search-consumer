@@ -68,8 +68,8 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
         // when
         testProducer.send(new ProducerRecord<>(MAIN_TOPIC, 0, System.currentTimeMillis(), "key",
             UPDATE));
-        if (!latch.await(5L, TimeUnit.SECONDS)) { 
-            fail("Timed out waiting for latch"); 
+        if (!latch.await(5L, TimeUnit.SECONDS)) {
+            fail("Timed out waiting for latch");
         }
 
         ConsumerRecords<?, ?> consumerRecords = KafkaTestUtils.getRecords(testConsumer,
