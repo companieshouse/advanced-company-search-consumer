@@ -1,33 +1,36 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.config;
 
+import java.time.Duration;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.springframework.test.context.ActiveProfiles;
+
+import uk.gov.companieshouse.advancedcompanysearchconsumer.service.AbstractKafkaIntegrationTest;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.ERROR_TOPIC;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.INVALID_TOPIC;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.MAIN_TOPIC;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.RETRY_TOPIC;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.noOfRecordsForTopic;
-
-import java.time.Duration;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
-import org.springframework.test.context.ActiveProfiles;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.service.AbstractKafkaIntegrationTest;
 import uk.gov.companieshouse.kafka.exceptions.SerializationException;
 import uk.gov.companieshouse.kafka.serialization.AvroSerializer;
 import uk.gov.companieshouse.stream.ResourceChangedData;
@@ -43,11 +46,19 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
     @Autowired
     private CountDownLatch latch;
 
-    @MockBean
+    @Autowired
     private AvroSerializer<ResourceChangedData> serializer;
 
+    @TestConfiguration
+    static class MockConfig {
+        @Bean
+        AvroSerializer<ResourceChangedData> serializer() {
+            return Mockito.mock(AvroSerializer.class);
+        }
+    }
+    
     @BeforeEach
-    public void drainKafkaTopics() {
+    void drainKafkaTopics() {
         testConsumer.poll(Duration.ofSeconds(1));
     }
 
