@@ -36,7 +36,7 @@ class ConsumerInvalidTopicTest extends AbstractKafkaIntegrationTest {
     private CountDownLatch latch;
 
     @BeforeEach
-    public void drainKafkaTopics() {
+    void drainKafkaTopics() {
         testConsumer.poll(Duration.ofSeconds(1));
     }
 
