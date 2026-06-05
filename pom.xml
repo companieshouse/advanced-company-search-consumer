@@ -31,6 +31,8 @@
         <jose4j.version>0.9.6</jose4j.version>
         <log4j-to-slf4j.version>2.25.4</log4j-to-slf4j.version>
         <log4j-api.version>2.25.4</log4j-api.version>
+        <tomcat-embed-core.version>11.0.22</tomcat-embed-core.version>
+        <tomcat-embed-websocket.version>11.0.22</tomcat-embed-websocket.version>
         <kafka-clients.version>3.9.2</kafka-clients.version>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.integration.tests>false</skip.integration.tests>
@@ -83,6 +85,18 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j-to-slf4j.version}</version>
+            </dependency>
+            <!-- CVE-2026-41293(9.8), CVE-2026-41284(7.5), CVE-2026-43513(7.5), CVE-2026-43512(9.8) -->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat-embed-core.version}</version>
+            </dependency>
+            <!-- CVE-2026-41293(9.8), CVE-2026-41284(7.5), CVE-2026-43513(7.5), CVE-2026-43512(9.8) -->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>${tomcat-embed-websocket.version}</version>
             </dependency>
             <!-- CVE-2026-33558(5.3) -->
             <dependency>
