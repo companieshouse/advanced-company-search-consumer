@@ -33,6 +33,7 @@
         <log4j-api.version>2.25.4</log4j-api.version>
         <tomcat-embed-core.version>11.0.22</tomcat-embed-core.version>
         <tomcat-embed-websocket.version>11.0.22</tomcat-embed-websocket.version>
+        <netty-codec.version>4.2.15.Final</netty-codec.version>
         <kafka-clients.version>3.9.2</kafka-clients.version>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.integration.tests>false</skip.integration.tests>
@@ -97,6 +98,11 @@
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-websocket</artifactId>
                 <version>${tomcat-embed-websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${netty-codec.version}</version>
             </dependency>
             <!-- CVE-2026-33558(5.3) -->
             <dependency>
