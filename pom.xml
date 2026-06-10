@@ -27,7 +27,6 @@
         <kafka-models.version>3.0.31</kafka-models.version>
         <ch-kafka.version>3.0.6</ch-kafka.version>
         <system-lambda.version>1.2.1</system-lambda.version>
-        <spring-web.version>6.2.18</spring-web.version>
         <spring-kafka.version>3.3.13</spring-kafka.version>
         <jose4j.version>0.9.6</jose4j.version>
         <log4j-to-slf4j.version>2.25.4</log4j-to-slf4j.version>
@@ -221,17 +220,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.16.0</version>
-        </dependency>
-        <!-- Avoid potential security vulnerability CVE-2024-22243. -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring-web.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring-web.version}</version>
         </dependency>
         <!--CVE-2025-48924-->
         <dependency>
