@@ -23,6 +23,6 @@ In order to build `advanced-company-search-consumer` locally you will need the f
 
 ## Endpoints
 
-| Path                                                  | Method | Description                                                         |
-|-------------------------------------------------------|--------|---------------------------------------------------------------------|
-| *`/advanced-company-search-consumer/healthcheck`* | GET    | Returns HTTP OK (`200`) to indicate a healthy application instance. |
+| Path                                                | Method | Description                                                         |
+|-----------------------------------------------------|--------|---------------------------------------------------------------------|
+| *`/advanced-company-search-consumer/healthcheck`*   | GET    | Returns HTTP OK (`200`) to indicate a healthy application instance. |
