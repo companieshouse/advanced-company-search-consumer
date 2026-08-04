@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,7 +33,7 @@ class CompanyProfileDeserialiserTest {
         when(mockObjectMapper.readValue(testData, CompanyProfileApi.class))
                 .thenReturn(mock(CompanyProfileApi.class));
 
-        deserialiser.deserialiseCompanyProfile("Dummy Data");
+        assertNotNull(deserialiser.deserialiseCompanyProfile("Dummy Data"));
     }
 
     @Test
