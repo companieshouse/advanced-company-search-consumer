@@ -17,7 +17,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <spring-boot-dependencies.version>4.1.0</spring-boot-dependencies.version>
-        <spring-boot-maven-plugin.version>3.5.10</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>${spring-boot-dependencies.version}</spring-boot-maven-plugin.version>
         <test-containers.version>1.19.4</test-containers.version>
         <private-api-sdk-java.version>6.0.6</private-api-sdk-java.version>
         <system-lambda.version>1.2.1</system-lambda.version>
@@ -271,6 +271,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
