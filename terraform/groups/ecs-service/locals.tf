@@ -4,13 +4,15 @@ locals {
   name_prefix                = "${local.stack_name}-${var.environment}"
   global_prefix              = "global-${var.environment}"
   service_name               = "advanced-company-search-consumer"
+  service_name_old_kafka     = "advanced-company-search-consumer-old-kafka"
   container_port             = 8080
   docker_repo                = "advanced-company-search-consumer"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority  = 22
   lb_listener_paths          = ["/advanced-company-search-consumer/*"]
   s3_config_bucket           = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
-  app_environment_filename   = "advanced-company-search-consumer.env"
+  app_environment_filename          = "advanced-company-search-consumer.env"
+  app_environment_filename_old_kafka = "advanced-company-search-consumer-old-kafka.env"
   use_set_environment_files  = var.use_set_environment_files
   application_subnet_ids     = data.aws_subnets.application.ids
   application_subnet_pattern = local.stack_secrets["application_subnet_pattern"]

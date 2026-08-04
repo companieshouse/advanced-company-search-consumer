@@ -159,6 +159,18 @@ variable "advanced_company_search_consumer_version" {
   description = "The version of the advanced-company-search-consumer container to run."
 }
 
+variable "create_old_kafka_service" {
+  type        = bool
+  description = "Whether to create the old Kafka 0.10 ECS service alongside the upgraded one."
+  default     = false
+}
+
+variable "advanced_company_search_consumer_old_kafka_version" {
+  type        = string
+  description = "The specific release tag for the old Kafka 0.10 version of the container."
+  default     = "latest"
+}
+
 variable "log_level" {
   default     = "info"
   type        = string
