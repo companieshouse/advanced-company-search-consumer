@@ -30,10 +30,6 @@
         <kafka-clients.version>3.9.2</kafka-clients.version>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.integration.tests>false</skip.integration.tests>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
-			${project.basedir}/target/site/jacoco-it/jacoco.xml
-		</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
 
         <!-- Docker -->
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
@@ -41,17 +37,28 @@
         <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
         <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-		<sonar.login></sonar.login>
-		<sonar.password></sonar.password>
-		<sonar.projectKey>uk.gov.companieshouse:advanced-company-search-consumer</sonar.projectKey>
-		<sonar.projectName>advanced-company-search-consumer</sonar.projectName>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+
+        <sonar.jacoco.reports>${project.build.directory}/site</sonar.jacoco.reports>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
+        <maven-test-plugin.version>3.5.5</maven-test-plugin.version>
+        <maven-surefire-plugin.version>${maven-test-plugin.version}</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>${maven-test-plugin.version}</maven-failsafe-plugin.version>
+
         <junit-jupiter.version>5.13.4</junit-jupiter.version>
         <junit-platform.version>1.13.4</junit-platform.version>
         <avro.version>1.12.1</avro.version>
 
         <ch-boms.version>0.1.15</ch-boms.version>
+
+        <!-- Sonar Exclusions -->
+        <sonar.exclusions>
+            **/Application.java
+        </sonar.exclusions>
+
+        <jib-maven-plugin.image>416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-corretto-build-21
+        </jib-maven-plugin.image>
+        <mockito-inline.version>5.2.0</mockito-inline.version>
+        <commons-compress.version>1.26.0</commons-compress.version>
     </properties>
 
     <dependencyManagement>
@@ -185,7 +192,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.26.0</version>
+            <version>${commons-compress.version}</version>
         </dependency>
 
         <dependency>
@@ -249,7 +256,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
+            <version>${mockito-inline.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -300,30 +307,70 @@
                 <version>${jib-maven-plugin.version}</version>
                 <configuration>
                     <from>
-                        <image>416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-corretto-build-21</image>
+                        <image>${jib-maven-plugin.image}</image>
                     </from>
                 </configuration>
             </plugin>
 
+            <!-- JaCoCo Maven Plugin for Code Coverage -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
-                    <skipTests>${skip.unit.tests}</skipTests>
                     <excludes>
-                        <exclude>**/Runner.java</exclude>
+                        <exclude>**/Application.class</exclude>
                     </excludes>
-                    <argLine>
-                        --add-opens java.base/java.lang=ALL-UNNAMED
-                        --add-opens java.base/java.util=ALL-UNNAMED
-                    </argLine>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                            <!-- Sets the path to the file which contains the execution model. -->
+                            <destFile>${sonar.jacoco.reports}/jacoco.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <dataFile>${sonar.jacoco.reports}/jacoco.exec</dataFile>
+                            <!-- Sets the output directory for the code coverage report. -->
+                            <outputDirectory>${sonar.jacoco.reports}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>failsafeArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-failsafe-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -333,12 +380,20 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <argLine>
+                        -Dfile.encoding=UTF-8
+                        ${failsafeArgLine}
+                    </argLine>
                     <!-- See SUREFIRE-1198 -->
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <properties>
                         <configurationParameters>
                             cucumber.junit-platform.naming-strategy=long
                         </configurationParameters>
+                        <property>
+                            <name>listener</name>
+                            <value>org.sonar.java.jacoco.JUnitListener</value>
+                        </property>
                     </properties>
                     <skipITs>${skip.integration.tests}</skipITs>
                     <includes>
@@ -346,14 +401,21 @@
                     </includes>
                 </configuration>
             </plugin>
+
+            <!-- Unit Testing -->
             <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-              <groupId>org.sonarsource.scanner.maven</groupId>
-              <artifactId>sonar-maven-plugin</artifactId>
-              <version>${sonar-maven-plugin.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>
+                        -Dfile.encoding=UTF-8
+                        ${surefireArgLine}
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                    </argLine>
+                    <skipTests>${skip.unit.tests}</skipTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>
