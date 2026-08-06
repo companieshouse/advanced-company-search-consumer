@@ -17,11 +17,11 @@ test: test-unit
 
 .PHONY: test-unit
 test-unit: clean
-	mvn test -DexcludedGroups="integration-test"
+	mvn verify -DexcludedGroups="integration-test"
 
 .PHONY: test-integration
 test-integration: clean
-	mvn test -Dgroups="unit-test, integration-test"
+	mvn verify -Dgroups="unit-test, integration-test"
 
 .PHONY: package
 package:
