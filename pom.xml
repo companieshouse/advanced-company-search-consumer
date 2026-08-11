@@ -33,17 +33,7 @@
 
         <!-- Docker -->
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
-
-        <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
-        <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
-        <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-        <sonar.login></sonar.login>
-        <sonar.password></sonar.password>
-        <sonar.projectKey>uk.gov.companieshouse:advanced-company-search-consumer</sonar.projectKey>
-        <sonar.projectName>advanced-company-search-consumer</sonar.projectName>
-
-
-        <sonar.jacoco.reports>${project.build.directory}/site</sonar.jacoco.reports>
+        <jacoco.reports.directory>${project.build.directory}/site</jacoco.reports.directory>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <maven-test-plugin.version>3.5.5</maven-test-plugin.version>
         <maven-surefire-plugin.version>${maven-test-plugin.version}</maven-surefire-plugin.version>
@@ -53,7 +43,7 @@
         <junit-platform.version>1.13.4</junit-platform.version>
         <avro.version>1.12.1</avro.version>
 
-        <ch-boms.version>0.1.15</ch-boms.version>
+        <ch-boms.version>0.1.16</ch-boms.version>
 
         <!-- Sonar Exclusions -->
         <sonar.exclusions>
@@ -64,6 +54,7 @@
         </jib-maven-plugin.image>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <commons-compress.version>1.26.0</commons-compress.version>
+        <commons-io.version>2.22.0</commons-io.version>
     </properties>
 
     <dependencyManagement>
@@ -82,14 +73,6 @@
                 <groupId>uk.gov.companieshouse</groupId>
                 <artifactId>ch-test-bom</artifactId>
                 <version>${ch-boms.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>${netty.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -288,6 +271,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -336,7 +320,7 @@
                         <configuration>
                             <propertyName>surefireArgLine</propertyName>
                             <!-- Sets the path to the file which contains the execution model. -->
-                            <destFile>${sonar.jacoco.reports}/jacoco.exec</destFile>
+                            <destFile>${jacoco.reports.directory}/jacoco.exec</destFile>
                         </configuration>
                     </execution>
                     <execution>
@@ -347,9 +331,9 @@
                         </goals>
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${sonar.jacoco.reports}/jacoco.exec</dataFile>
+                            <dataFile>${jacoco.reports.directory}/jacoco.exec</dataFile>
                             <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${sonar.jacoco.reports}/jacoco</outputDirectory>
+                            <outputDirectory>${jacoco.reports.directory}/jacoco</outputDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -419,7 +403,6 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
-
         </plugins>
     </build>
 </project>
