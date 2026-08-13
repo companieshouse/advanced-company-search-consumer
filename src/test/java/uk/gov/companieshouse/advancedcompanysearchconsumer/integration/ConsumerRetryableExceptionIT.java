@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
+package uk.gov.companieshouse.advancedcompanysearchconsumer.integration;
 
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +22,8 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.service.Service;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils;
@@ -29,13 +34,14 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtil
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
-@ActiveProfiles("test_main_positive")
-class ConsumerPositiveTest extends AbstractKafkaIntegrationTest {
+@ActiveProfiles("test_main_retryable")
+class ConsumerRetryableExceptionIT extends AbstractKafkaIntegrationTest {
 
     @Autowired
     private KafkaProducer<String, ResourceChangedData> testProducer;
     @Autowired
     private KafkaConsumer<String, ResourceChangedData> testConsumer;
+
     @Autowired
     private CountDownLatch latch;
 
@@ -43,25 +49,28 @@ class ConsumerPositiveTest extends AbstractKafkaIntegrationTest {
     private Service service;
 
     @BeforeEach
-    void setup() {
+    void drainKafkaTopics() {
         testConsumer.poll(Duration.ofSeconds(1));
     }
 
     @Test
-    void testConsumeFromMainTopic() throws Exception {
+    void testRepublishToErrorTopicThroughRetryTopics() throws InterruptedException {
+        //given
+        doThrow(RetryableException.class).when(service).processMessage(any());
 
+        //when
         testProducer.send(new ProducerRecord<>(MAIN_TOPIC, 0, System.currentTimeMillis(), "key",
                 UPDATE));
         if (!latch.await(5L, TimeUnit.SECONDS)) {
             fail("Timed out waiting for latch");
         }
-        ConsumerRecords<?, ?> consumerRecords = KafkaTestUtils.getRecords(testConsumer, Duration.ofSeconds(10), 1);
+        ConsumerRecords<?, ?> consumerRecords = KafkaTestUtils.getRecords(testConsumer, Duration.ofSeconds(10), 6);
 
         //then
         assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, MAIN_TOPIC)).isEqualTo(1);
-        assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, RETRY_TOPIC)).isZero();
-        assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, ERROR_TOPIC)).isZero();
+        assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, RETRY_TOPIC)).isEqualTo(4);
+        assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, ERROR_TOPIC)).isEqualTo(1);
         assertThat(TestUtils.noOfRecordsForTopic(consumerRecords, INVALID_TOPIC)).isZero();
-        verify(service).processMessage(new ServiceParameters(UPDATE));
+        verify(service, times(5)).processMessage(new ServiceParameters(UPDATE));
     }
 }

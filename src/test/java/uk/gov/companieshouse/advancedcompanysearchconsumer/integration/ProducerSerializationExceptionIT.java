@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.advancedcompanysearchconsumer.config;
+package uk.gov.companieshouse.advancedcompanysearchconsumer.integration;
 
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
 
-import uk.gov.companieshouse.advancedcompanysearchconsumer.service.AbstractKafkaIntegrationTest;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.ERROR_TOPIC;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.INVALID_TOPIC;
@@ -37,7 +36,7 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
 @ActiveProfiles("test_main_nonretryable")
-class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
+class ProducerSerializationExceptionIT extends AbstractKafkaIntegrationTest {
 
     @Autowired
     private KafkaProducer<String, ResourceChangedData> testProducer;
@@ -56,7 +55,7 @@ class ProducerSerializationExceptionTest extends AbstractKafkaIntegrationTest {
             return Mockito.mock(AvroSerializer.class);
         }
     }
-    
+
     @BeforeEach
     void drainKafkaTopics() {
         testConsumer.poll(Duration.ofSeconds(1));

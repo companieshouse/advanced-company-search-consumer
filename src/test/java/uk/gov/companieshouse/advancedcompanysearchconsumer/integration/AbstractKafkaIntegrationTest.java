@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
+package uk.gov.companieshouse.advancedcompanysearchconsumer.integration;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
