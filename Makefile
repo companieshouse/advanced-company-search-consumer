@@ -13,15 +13,15 @@ build:
 	mvn compile
 
 .PHONY: test
-test: test-unit
+test: test-unit test-integration
 
 .PHONY: test-unit
 test-unit: clean
-	mvn verify -DexcludedGroups="integration-test"
+	mvn clean verify -Dskip.unit.tests=false -Dskip.integration.tests=true
 
 .PHONY: test-integration
 test-integration: clean
-	mvn verify -Dgroups="unit-test, integration-test"
+	mvn clean verify -Dskip.unit.tests=true -Dskip.integration.tests=false
 
 .PHONY: package
 package:
