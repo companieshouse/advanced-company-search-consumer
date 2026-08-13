@@ -1,6 +1,19 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
-import org.apache.kafka.common.security.oauthbearer.internals.secured.UnretryableException;
+import static org.apache.commons.io.IOUtils.resourceToString;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.DELETE_PAYLOAD;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.WRONG_EVENT_TYPE_PAYLOAD;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,20 +29,6 @@ import uk.gov.companieshouse.logging.Logger;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
-import static org.apache.commons.io.IOUtils.resourceToString;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.DELETE_PAYLOAD;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.WRONG_EVENT_TYPE_PAYLOAD;
 
 @ExtendWith(MockitoExtension.class)
 class AdvancedIndexUpdaterServiceTest {
@@ -82,7 +81,7 @@ class AdvancedIndexUpdaterServiceTest {
 
     @Test
     @DisplayName("processMessage() correctly calls the delete service when event.type is 'deleted'")
-    public void testProcessMessage_DeletedMessageType() throws ApiErrorResponseException, URIValidationException {
+    void testProcessMessage_DeletedMessageType() throws ApiErrorResponseException, URIValidationException {
         // Given
         when(serviceParameters.getData()).thenReturn(DELETE_PAYLOAD);
 

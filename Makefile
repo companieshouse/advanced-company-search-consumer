@@ -17,11 +17,11 @@ test: test-unit
 
 .PHONY: test-unit
 test-unit: clean
-	mvn test -DexcludedGroups="integration-test"
+	mvn verify -DexcludedGroups="integration-test"
 
 .PHONY: test-integration
 test-integration: clean
-	mvn test -Dgroups="unit-test, integration-test"
+	mvn verify -Dgroups="unit-test, integration-test"
 
 .PHONY: package
 package:
@@ -43,11 +43,4 @@ dist: clean package
 publish:
 	mvn jar:jar deploy:deploy
 
-.PHONY: sonar
-sonar:
-	mvn sonar:sonar
-
-.PHONY: sonar-pr-analysis
-sonar-pr-analysis:
-	mvn sonar:sonar -P sonar-pr-analysis
 

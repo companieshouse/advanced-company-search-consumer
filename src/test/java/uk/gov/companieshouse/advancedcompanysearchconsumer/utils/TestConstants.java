@@ -4,7 +4,7 @@ import static java.util.Collections.emptyList;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import uk.gov.companieshouse.stream.EventRecord;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
