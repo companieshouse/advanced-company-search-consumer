@@ -353,14 +353,16 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Unit Testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <skipTests>${skip.unit.tests}</skipTests>
                     <excludes>
-                        <exclude>**/Runner.java</exclude>
+                        <exclude>**/*IntegrationTest.java</exclude>
+                        <exclude>**/*IT.java</exclude>
                     </excludes>
                     <argLine>
                         -Dfile.encoding=UTF-8
@@ -368,14 +370,18 @@
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
                     </argLine>
+                    <skipTests>${skip.unit.tests}</skipTests>
                 </configuration>
             </plugin>
+
+            <!-- Integration Testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-failsafe-plugin.version}</version>
                 <executions>
                     <execution>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
@@ -383,19 +389,25 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- See SUREFIRE-1198 -->
-                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <properties>
-                        <configurationParameters>
-                            cucumber.junit-platform.naming-strategy=long
-                        </configurationParameters>
+                        <property>
+                            <name>listener</name>
+                            <value>org.sonar.java.jacoco.JUnitListener</value>
+                        </property>
                     </properties>
-                    <skipITs>${skip.integration.tests}</skipITs>
                     <includes>
-                        <include>**/Runner.java</include>
+                        <include>**/*IntegrationTest.java</include>
+                        <include>**/*IT.java</include>
                     </includes>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                    <argLine>${failsafeArgLine}</argLine>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <skipITs>${skip.integration.tests}</skipITs>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>
