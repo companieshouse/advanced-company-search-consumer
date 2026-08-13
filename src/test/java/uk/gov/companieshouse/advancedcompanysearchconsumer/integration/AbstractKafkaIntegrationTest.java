@@ -10,13 +10,17 @@ import org.testcontainers.utility.DockerImageName;
 
 import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
+import java.time.Duration;
+
 @Testcontainers
 @Import(TestKafkaConfig.class)
 public abstract class AbstractKafkaIntegrationTest {
 
     @Container
     protected static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse(
-            "confluentinc/cp-kafka:latest")).withKraft();
+            "confluentinc/cp-kafka:latest"))
+            .withStartupTimeout(Duration.ofMinutes(2))
+            .withKraft();
 
     @DynamicPropertySource
     static void props(DynamicPropertyRegistry registry) {
