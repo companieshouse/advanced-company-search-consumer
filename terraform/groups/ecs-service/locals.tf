@@ -23,7 +23,6 @@ locals {
   service_secrets = jsondecode(data.vault_generic_secret.service_secrets.data_json)
 
   service_vault_secrets = {
-      "bootstrap_server_url" = local.service_secrets["bootstrap_server_url"]
       "vpc_name"             = local.service_secrets["vpc_name"]
       "chs_api_key"          = local.service_secrets["chs_api_key"]
   }
