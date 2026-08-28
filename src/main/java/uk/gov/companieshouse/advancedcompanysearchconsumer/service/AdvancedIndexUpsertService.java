@@ -21,11 +21,13 @@ public class AdvancedIndexUpsertService {
     }
 
     public void upsertCompanyProfileService(ResourceChangedData data) throws ApiErrorResponseException, URIValidationException {
+        logger.info("upsertCompanyProfileService(companyNumber=%s) method called.".formatted(data.getResourceId()));
 
         String companyNumber = data.getResourceId();
-        logger.info("Attempting to upsert company: " + companyNumber + " to Advanced Search Index");
         String formattedUri = String.format("/advanced-search/companies/%s", companyNumber);
+
         CompanyProfileApi companyProfile = deserialiser.deserialiseCompanyProfile(data.getData());
+
         apiClientService
                 .getInternalApiClient()
                 .privateSearchResourceHandler()

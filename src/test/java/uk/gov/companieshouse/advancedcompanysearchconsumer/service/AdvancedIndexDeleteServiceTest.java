@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,12 +18,6 @@ import uk.gov.companieshouse.api.handler.search.PrivateSearchResourceHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.PrivateAdvancedCompanySearchHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.request.PrivateAdvancedCompanySearchDelete;
 import uk.gov.companieshouse.logging.Logger;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AdvancedIndexDeleteServiceTest {
@@ -55,7 +55,7 @@ public class AdvancedIndexDeleteServiceTest {
         String resourceId = "123456";
         advancedIndexDeleteService.deleteCompanyFromAdvancedIndex(resourceId);
 
-        verify(logger).info("Delete " + resourceId + " from Advanced index!");
+        verify(logger).info("deleteCompanyFromAdvancedIndex(companyNumber=%s) method called.".formatted(resourceId));
         verify(apiClientService.getInternalApiClient().privateSearchResourceHandler().advancedCompanySearch(), times(1)).deleteCompanyProfile("/advanced-search/companies/" + resourceId);
     }
 

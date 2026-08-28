@@ -1,11 +1,12 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
+import org.jspecify.annotations.NonNull;
+import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.DltStrategy;
 import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
 import org.springframework.messaging.Message;
-import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.MessageFlags;
@@ -40,16 +41,17 @@ public class Consumer {
     @RetryableTopic(
             attempts = "${consumer.max_attempts}",
             autoCreateTopics = "false",
-            backoff = @Backoff(delayExpression = "${consumer.backoff_delay}"),
+            backOff = @BackOff(delayString = "${consumer.backoff_delay}"),
             retryTopicSuffix = "-${consumer.group_id}-retry",
             dltTopicSuffix = "-${consumer.group_id}-error",
             dltStrategy = DltStrategy.FAIL_ON_ERROR,
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             include = RetryableException.class
     )
-    public void consume(Message<ResourceChangedData> message) {
+    public void consume(Message<@NonNull ResourceChangedData> message) {
         try {
             service.processMessage(new ServiceParameters(message.getPayload()));
+
         } catch (RetryableException e) {
             messageFlags.setRetryable(true);
             throw e;
