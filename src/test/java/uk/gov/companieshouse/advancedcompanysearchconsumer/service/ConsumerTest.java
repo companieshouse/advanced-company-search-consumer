@@ -3,7 +3,6 @@ package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -64,7 +63,7 @@ class ConsumerTest {
         RetryableException retryableException = new RetryableException("Retryable error", null);
 
         ServiceParameters parameters = new ServiceParameters(payload);
-        doThrow(retryableException).when(service).processMessage(eq(parameters));
+        doThrow(retryableException).when(service).processMessage(parameters);
 
         RetryableException thrownException = assertThrows(RetryableException.class,
                 () -> consumer.consume(message)
@@ -80,7 +79,7 @@ class ConsumerTest {
         RuntimeException runtimeException = new RuntimeException("Something went wrong");
 
         ServiceParameters parameters = new ServiceParameters(payload);
-        doThrow(runtimeException).when(service).processMessage(eq(parameters));
+        doThrow(runtimeException).when(service).processMessage(parameters);
 
         RuntimeException thrownException = assertThrows(RuntimeException.class,
                 () -> consumer.consume(message)

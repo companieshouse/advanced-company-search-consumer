@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -90,15 +89,13 @@ class AdvancedIndexDeleteServiceTest {
     }
 
     @Test
-    @Disabled
-    void shouldPropagateUriValidationException() {
+    void shouldPropagateUriValidationException() throws Exception{
         when(searchHandler.deleteCompanyProfile("/advanced-search/companies/12345678"))
                 .thenReturn(searchDelete);
 
         URIValidationException exception = new URIValidationException("Invalid URI");
 
-        when(searchHandler.deleteCompanyProfile("/advanced-search/companies/12345678"))
-                .thenThrow(exception);
+        when(searchDelete.execute()).thenThrow(exception);
 
         assertThrows(URIValidationException.class,
                 () -> service.deleteCompanyFromAdvancedIndex("12345678")

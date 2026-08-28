@@ -159,8 +159,7 @@ class AdvancedIndexUpdaterServiceTest {
     void shouldThrowNonRetryableExceptionWhenDeleteThrowsException() throws Exception {
         when(event.getType()).thenReturn("deleted");
 
-        RuntimeException runtimeException =
-                new RuntimeException("Something went wrong");
+        RuntimeException runtimeException = new RuntimeException("Something went wrong");
 
         doThrow(runtimeException)
                 .when(advancedIndexDeleteService)
