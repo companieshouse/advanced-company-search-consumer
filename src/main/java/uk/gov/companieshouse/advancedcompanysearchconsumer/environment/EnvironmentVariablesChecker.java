@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.environment;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompanySearchConsumerApplication.NAMESPACE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
 
 import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.environment.exception.EnvironmentVariableException;

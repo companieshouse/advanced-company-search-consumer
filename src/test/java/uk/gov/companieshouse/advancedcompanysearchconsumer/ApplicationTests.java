@@ -10,7 +10,7 @@ import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfi
 @SpringBootTest
 @Import(TestKafkaConfig.class)
 @ActiveProfiles("test_main_positive")
-class AdvancedCompanySearchConsumerApplicationTests {
+class ApplicationTests {
     
     @SuppressWarnings("squid:S2699") // at least one assertion
     @DisplayName("Context loads")

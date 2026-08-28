@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompanySearchConsumerApplication.NAMESPACE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.logging.LoggingUtils.getLogMap;
 
 import java.util.Map;

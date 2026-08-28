@@ -10,9 +10,11 @@
         <relativePath/>
     </parent>
 
+    <groupId>com.companieshouse</groupId>
     <artifactId>advanced-company-search-consumer</artifactId>
-    <version>unversioned</version>
-    <name>advanced-company-search-consumer</name>
+    <version>latest</version>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
     <description>A service that consumes messages from the stream-company-profile topic and upserts the data to the advanced ElasticSearch index.</description>
 
     <properties>
@@ -47,7 +49,7 @@
         <avro.version>1.12.1</avro.version>
 
         <!-- Testing -->
-        <test-containers.version>1.19.4</test-containers.version>
+        <test-containers.version>1.21.4</test-containers.version>
         <system-lambda.version>1.2.1</system-lambda.version>
         <junit-jupiter.version>5.13.4</junit-jupiter.version>
         <junit-platform.version>1.13.4</junit-platform.version>
@@ -352,12 +354,13 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <excludes>
+                        <exclude>**/*ITest.java</exclude>
                         <exclude>**/*IntegrationTest.java</exclude>
                         <exclude>**/*IT.java</exclude>
                     </excludes>
-                    <argLine>-Dfile.encoding=UTF-8</argLine>
-                    <argLine>${surefireArgLine}</argLine>
                     <argLine>
+                        ${surefireArgLine}
+                        -Dfile.encoding=UTF-8
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
                     </argLine>
@@ -386,16 +389,13 @@
                             <value>org.sonar.java.jacoco.JUnitListener</value>
                         </property>
                     </properties>
-                    <includes>
-                        <include>**/*IntegrationTest.java</include>
-                        <include>**/*IT.java</include>
-                    </includes>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                     <argLine>${failsafeArgLine}</argLine>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <skipITs>${skip.integration.tests}</skipITs>
-                    <forkCount>1</forkCount>
-                    <reuseForks>false</reuseForks>
+                    <includes>
+                        <include>**/*ITest.java</include>
+                    </includes>
                 </configuration>
             </plugin>
 

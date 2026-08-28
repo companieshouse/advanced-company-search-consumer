@@ -23,6 +23,7 @@ public class AdvancedIndexDeleteService {
                 .getInternalApiClient()
                 .privateSearchResourceHandler()
                 .advancedCompanySearch()
-                .deleteCompanyProfile("/advanced-search/companies/" + resourceId).execute();
+                .deleteCompanyProfile("/advanced-search/companies/" + resourceId)
+                .execute();
     }
 }

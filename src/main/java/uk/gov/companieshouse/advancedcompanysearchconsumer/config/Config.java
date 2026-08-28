@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.config;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompanySearchConsumerApplication.NAMESPACE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
 
 import consumer.deserialization.AvroDeserializer;
 import java.util.Map;
