@@ -6,13 +6,13 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.environment.En
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AdvancedCompanySearchConsumerApplication {
+public class Application {
 
     public static final String NAMESPACE = "advanced-company-search-consumer";
 
     public static void main(String[] args) {
         if (allRequiredEnvironmentVariablesPresent()) {
-            run(AdvancedCompanySearchConsumerApplication.class, args);
+            run(Application.class, args);
         }
     }
 

@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompanySearchConsumerApplication.NAMESPACE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;

@@ -17,11 +17,13 @@ public class AdvancedIndexDeleteService {
     }
 
     public void deleteCompanyFromAdvancedIndex(String resourceId) throws ApiErrorResponseException, URIValidationException {
-        logger.info("Delete " + resourceId + " from Advanced index!");
+        logger.info("deleteCompanyFromAdvancedIndex(companyNumber=%s) method called.".formatted(resourceId));
+
         apiClientService
                 .getInternalApiClient()
                 .privateSearchResourceHandler()
                 .advancedCompanySearch()
-                .deleteCompanyProfile("/advanced-search/companies/" + resourceId).execute();
+                .deleteCompanyProfile("/advanced-search/companies/" + resourceId)
+                .execute();
     }
 }

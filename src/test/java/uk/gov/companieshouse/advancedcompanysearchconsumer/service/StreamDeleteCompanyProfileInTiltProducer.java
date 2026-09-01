@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.AdvancedCompanySearchConsumerApplication;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.Application;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
@@ -26,7 +26,7 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestCons
  * <code>company-stream-profile</code> topic in Tilt. This is NOT to be run as part of an automated
  * test suite. It is for manual testing only.
  */
-@SpringBootTest(classes = AdvancedCompanySearchConsumerApplication.class,
+@SpringBootTest(classes = Application.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestPropertySource(locations = "classpath:stream-company-profile-in-tilt.properties")

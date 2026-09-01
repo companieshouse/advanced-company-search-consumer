@@ -1,99 +1,163 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.search.PrivateSearchResourceHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.PrivateAdvancedCompanySearchHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.request.PrivateAdvancedCompanySearchUpsert;
-import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
-import static org.mockito.Mockito.*;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
-
 @ExtendWith(MockitoExtension.class)
-public class AdvancedIndexUpsertServiceTest {
+class AdvancedIndexUpsertServiceTest {
 
     @Mock
     private Logger logger;
 
     @Mock
     private ApiClientService apiClientService;
-    @Mock
-    private InternalApiClient internalApiClient;
 
     @Mock
-    private PrivateSearchResourceHandler privateSearchResourceHandler;
+    private CompanyProfileDeserialiser deserialiser;
 
     @Mock
-    private PrivateAdvancedCompanySearchHandler privateAdvancedCompanySearchHandler;
+    private ResourceChangedData data;
 
     @Mock
-    private PrivateAdvancedCompanySearchUpsert privateAdvancedCompanySearchUpsert;
+    private CompanyProfileApi companyProfile;
 
     @Mock
-    private CompanyProfileApi companyProfileApi;
+    private InternalApiClient apiClient;
 
     @Mock
-    private CompanyProfileDeserialiser companyProfileDeserialiser;
+    private PrivateSearchResourceHandler resourceHandler;
 
     @Mock
-    private ResourceChangedData resourceChangedData;
+    private PrivateAdvancedCompanySearchHandler searchHandler;
 
     @Mock
-    private ServiceParameters parameters;
+    private PrivateAdvancedCompanySearchUpsert searchUpsert;
 
-    @InjectMocks
-    private AdvancedIndexUpsertService advancedIndexUpsertService;
+    private AdvancedIndexUpsertService service;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
+        service = new AdvancedIndexUpsertService(logger, apiClientService, deserialiser);
 
-        when(apiClientService.getInternalApiClient()).thenReturn(internalApiClient);
-        when(internalApiClient.privateSearchResourceHandler()).thenReturn(privateSearchResourceHandler);
-        when(privateSearchResourceHandler.advancedCompanySearch()).thenReturn(privateAdvancedCompanySearchHandler);
-        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
+    }
+
+    private void setupMocks() {
+        when(data.getResourceId()).thenReturn("12345678");
+        when(data.getData()).thenReturn("company profile data");
+
+        when(deserialiser.deserialiseCompanyProfile("company profile data")).thenReturn(companyProfile);
+        when(apiClientService.getInternalApiClient()).thenReturn(apiClient);
+        when(apiClient.privateSearchResourceHandler()).thenReturn(resourceHandler);
+        when(resourceHandler.advancedCompanySearch()).thenReturn(searchHandler);
+
+        when(searchHandler.upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile))
+                .thenReturn(searchUpsert);
     }
 
     @Test
-    void processMessageUpsertsCompanyProfile_Success() throws ApiErrorResponseException, URIValidationException {
+    void shouldUpsertCompanyProfile() throws Exception {
+        setupMocks();
 
-        // given
-        when(resourceChangedData.getData()).thenReturn(UPDATE.getData());
-        when(companyProfileDeserialiser.deserialiseCompanyProfile(UPDATE.getData())).thenReturn(companyProfileApi);
+        service.upsertCompanyProfileService(data);
 
-        // when
-        advancedIndexUpsertService.upsertCompanyProfileService(resourceChangedData);
-
-        verify(privateAdvancedCompanySearchUpsert).execute();
-
+        verify(deserialiser).deserialiseCompanyProfile("company profile data");
+        verify(apiClientService).getInternalApiClient();
+        verify(apiClient).privateSearchResourceHandler();
+        verify(resourceHandler).advancedCompanySearch();
+        verify(searchHandler).upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile);
+        verify(searchUpsert).execute();
     }
 
     @Test
-    void upsertCompanyProfileIntoAdvancedIndex_Success() throws Exception {
-        // when
-        when(resourceChangedData.getData()).thenReturn(UPDATE.getData());
-        when(companyProfileDeserialiser.deserialiseCompanyProfile(anyString())).thenReturn(companyProfileApi);
-        when(apiClientService.getInternalApiClient()).thenReturn(internalApiClient);
-        when(internalApiClient.privateSearchResourceHandler()).thenReturn(privateSearchResourceHandler);
-        when(privateSearchResourceHandler.advancedCompanySearch()).thenReturn(privateAdvancedCompanySearchHandler);
-        when(privateAdvancedCompanySearchHandler.upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi)).thenReturn(privateAdvancedCompanySearchUpsert);
+    void shouldBuildCorrectUriFromCompanyNumber() throws Exception {
+        setupMocks();
 
-        advancedIndexUpsertService.upsertCompanyProfileService(resourceChangedData);
+        when(data.getResourceId()).thenReturn("12345678");
 
-        // then
-        verify(companyProfileDeserialiser).deserialiseCompanyProfile(UPDATE.getData());
-        verify(apiClientService.getInternalApiClient().privateSearchResourceHandler().advancedCompanySearch(), times(1)).upsertCompanyProfile("/advanced-search/companies/" + resourceChangedData.getResourceId(), companyProfileApi);
+        when(searchHandler.upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile))
+                .thenReturn(searchUpsert);
+
+        service.upsertCompanyProfileService(data);
+
+        verify(searchHandler).upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile);
     }
 
+    @Test
+    void shouldDeserialiseCompanyProfileBeforeUpserting() throws Exception {
+        setupMocks();
+
+        service.upsertCompanyProfileService(data);
+
+        verify(deserialiser).deserialiseCompanyProfile("company profile data");
+        verify(searchHandler).upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile);
+    }
+
+    @Test
+    void shouldPropagateApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+        setupMocks();
+
+        ApiErrorResponseException exception = mock(ApiErrorResponseException.class);
+
+        when(searchUpsert.execute()).thenThrow(exception);
+
+        assertThrows(ApiErrorResponseException.class,
+                () -> service.upsertCompanyProfileService(data)
+        );
+
+        verify(searchUpsert).execute();
+    }
+
+    @Test
+    void shouldPropagateUriValidationException() throws Exception {
+        setupMocks();
+
+        URIValidationException exception = new URIValidationException("Invalid URI");
+
+        when(searchHandler.upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile))
+                .thenReturn(searchUpsert);
+
+        when(searchUpsert.execute()).thenThrow(exception);
+
+        assertThrows(URIValidationException.class,
+                () -> service.upsertCompanyProfileService(data)
+        );
+
+        verify(searchHandler).upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile);
+    }
+
+    @Test
+    void shouldNotCallApiWhenDeserialisationFails() {
+        NonRetryableException exception = new NonRetryableException("Unable to deserialise company profile", null);
+
+        when(deserialiser.deserialiseCompanyProfile(anyString())).thenThrow(exception);
+
+        assertThrows(RuntimeException.class,
+                () -> service.upsertCompanyProfileService(data)
+        );
+
+        verify(deserialiser).deserialiseCompanyProfile(data.getData());
+        verify(searchHandler, never()).upsertCompanyProfile(anyString(), any());
+    }
 }
+

@@ -30,9 +30,11 @@ public class AdvancedIndexUpdaterService implements Service {
     }
 
     @Override
-    public void processMessage(ServiceParameters parameters) {
+    public void processMessage(final ServiceParameters parameters) {
+        logger.info("processMessage(parameters) method called.");
 
         final var message = parameters.getData();
+
         final var resourceId = message.getResourceId();
         final var resourceKind = message.getResourceKind();
         final var resourceUri = message.getResourceUri();
@@ -43,24 +45,26 @@ public class AdvancedIndexUpdaterService implements Service {
 
         try {
             var messageType = message.getEvent().getType();
-            message.getResourceId();
 
             switch (messageType) {
-                case "changed":
+                case "changed" -> {
                     logger.debug("This is a 'changed' type message.");
                     advancedIndexUpsertService.upsertCompanyProfileService(message);
-                    break;
-                case "deleted":
+                }
+                case "deleted" -> {
                     logger.debug("This is a 'deleted' type message.");
                     advancedIndexDeleteService.deleteCompanyFromAdvancedIndex(message.getResourceId());
-                    break;
-                default:
+                }
+                default -> {
                     logger.error(String.format("NonRetryable error occurred, unknown message type of %s", messageType));
                     throw new IllegalArgumentException("AdvancedIndexUpdaterService unknown message type.");
+                }
             }
+
         }catch (ApiErrorResponseException apiException) {
             logger.error(String.format("Error response from INTERNAL API: %s", apiException));
             throw new RetryableException("Attempting to retry due to failed API response", apiException);
+
         } catch (Exception exception) {
             final var rootCause = getRootCause(exception);
             logger.error(String.format("NonRetryable Error: %s", rootCause));
