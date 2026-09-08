@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
+package uk.gov.companieshouse.advancedcompanysearchconsumer.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,13 +18,13 @@ import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryabl
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 
 @ExtendWith(MockitoExtension.class)
-class CompanyProfileDeserialiserTest {
+class CompanyProfileMapperTest {
 
     @Mock
     private ObjectMapper mockObjectMapper;
 
     @InjectMocks
-    private CompanyProfileDeserialiser deserialiser;
+    private CompanyProfileMapper deserialiser;
 
     @Test
     void whenDeserialisationSuccessful_thenReturnCompanyProfileApi() throws JacksonException {
@@ -33,7 +33,7 @@ class CompanyProfileDeserialiserTest {
         when(mockObjectMapper.readValue(testData, CompanyProfileApi.class))
                 .thenReturn(mock(CompanyProfileApi.class));
 
-        assertNotNull(deserialiser.deserialiseCompanyProfile("Dummy Data"));
+        assertNotNull(deserialiser.mapToCompanyProfile("Dummy Data"));
     }
 
     @Test
@@ -45,7 +45,7 @@ class CompanyProfileDeserialiserTest {
                 .thenThrow(mockException);
 
         final var exception = assertThrows(NonRetryableException.class, () ->
-            deserialiser.deserialiseCompanyProfile(testData));
+            deserialiser.mapToCompanyProfile(testData));
 
         assertThat(exception.getMessage()).isEqualTo("Unable to parse message payload data");
         assertThat(exception.getCause()).isEqualTo(mockException);

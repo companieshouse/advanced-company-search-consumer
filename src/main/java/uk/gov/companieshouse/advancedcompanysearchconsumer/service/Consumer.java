@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.MessageFlags;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
+import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 /**
@@ -21,10 +22,12 @@ public class Consumer {
 
     private final Service service;
     private final MessageFlags messageFlags;
+    private final Logger logger;
 
-    public Consumer(Service service, MessageFlags messageFlags) {
+    public Consumer(Service service, MessageFlags messageFlags, Logger logger) {
         this.service = service;
         this.messageFlags = messageFlags;
+        this.logger = logger;
     }
 
     /**
@@ -48,7 +51,8 @@ public class Consumer {
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             include = RetryableException.class
     )
-    public void consume(Message<@NonNull ResourceChangedData> message) {
+    public void consume(final Message<@NonNull ResourceChangedData> message) {
+        logger.info("consume(resource_id=%s) method called.".formatted(message.getPayload().getResourceId()));
         try {
             service.processMessage(new ServiceParameters(message.getPayload()));
 

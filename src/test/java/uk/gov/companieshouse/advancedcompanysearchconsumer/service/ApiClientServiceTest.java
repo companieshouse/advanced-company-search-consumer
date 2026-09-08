@@ -21,7 +21,7 @@ class ApiClientServiceTest {
     @Test
     void testInternalApiClient() {
         assertThrows(EnvironmentVariableException.class,
-                () -> apiClientService.getInternalApiClient()
+                () -> apiClientService.getInternalApiClient().get()
         );
     }
 }

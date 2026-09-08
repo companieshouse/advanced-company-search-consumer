@@ -23,23 +23,27 @@ public class InvalidMessageRouter implements ProducerInterceptor<String, Resourc
     private String invalidMessageTopic;
 
     @Override
-    public ProducerRecord<String, ResourceChangedData> onSend(
-        ProducerRecord<String, ResourceChangedData> producerRecord) {
+    public ProducerRecord<String, ResourceChangedData> onSend(ProducerRecord<String, ResourceChangedData> producerRecord) {
+        LOGGER.info("onSend(topic=%s, retryable=%b) method called.".formatted(
+                producerRecord.topic(), messageFlags.isRetryable()), getLogMap(producerRecord.value()));
+
         if (messageFlags.isRetryable()) {
             messageFlags.destroy();
             return producerRecord;
+
         } else {
             final var message = producerRecord.value();
             final var resourceId = message.getResourceId();
             final var resourceKind = message.getResourceKind();
             final var resourceUri = message.getResourceUri();
+
             LOGGER.error("Encountered non-retryable exception producing message to topic "
                     + producerRecord.topic() + " for resource ID " + resourceId +
                     ", resource kind " + resourceKind + ", resource URI " + resourceUri
                     + ". Redirecting message to invalid topic " + invalidMessageTopic + ".",
                 getLogMap(message));
-            return new ProducerRecord<>(this.invalidMessageTopic, producerRecord.key(),
-                producerRecord.value());
+
+            return new ProducerRecord<>(this.invalidMessageTopic, producerRecord.key(), producerRecord.value());
         }
     }
 

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.search.PrivateSearchResourceHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.PrivateAdvancedCompanySearchHandler;
 import uk.gov.companieshouse.api.handler.search.advanced.request.PrivateAdvancedCompanySearchDelete;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.logging.Logger;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +29,9 @@ class AdvancedIndexDeleteServiceTest {
 
     @Mock
     private ApiClientService clientService;
+
+    @Mock
+    private Supplier<InternalApiClient> apiClientSupplier;
 
     @Mock
     private InternalApiClient apiClient;
@@ -44,14 +49,16 @@ class AdvancedIndexDeleteServiceTest {
     private AdvancedIndexDeleteService service;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws ApiErrorResponseException, URIValidationException {
         service = new AdvancedIndexDeleteService(logger, clientService);
 
-        when(clientService.getInternalApiClient()).thenReturn(apiClient);
+        when(clientService.getInternalApiClient()).thenReturn(apiClientSupplier);
+        when(apiClientSupplier.get()).thenReturn(apiClient);
         when(apiClient.privateSearchResourceHandler()).thenReturn(resourceHandler);
         when(resourceHandler.advancedCompanySearch()).thenReturn(searchHandler);
         when(searchHandler.deleteCompanyProfile("/advanced-search/companies/12345678"))
                 .thenReturn(searchDelete);
+        when(searchDelete.execute()).thenReturn(new ApiResponse<>(200, null));
     }
 
     @Test

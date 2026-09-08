@@ -1,8 +1,10 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.mapper.CompanyProfileMapper;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
@@ -12,9 +14,9 @@ public class AdvancedIndexUpsertService {
 
     private final Logger logger;
     private final ApiClientService apiClientService;
-    private final CompanyProfileDeserialiser deserialiser;
+    private final CompanyProfileMapper deserialiser;
 
-    public AdvancedIndexUpsertService(Logger logger, ApiClientService apiClientService, CompanyProfileDeserialiser deserialiser) {
+    public AdvancedIndexUpsertService(Logger logger, ApiClientService apiClientService, CompanyProfileMapper deserialiser) {
         this.logger = logger;
         this.apiClientService = apiClientService;
         this.deserialiser = deserialiser;
@@ -26,14 +28,19 @@ public class AdvancedIndexUpsertService {
         String companyNumber = data.getResourceId();
         String formattedUri = String.format("/advanced-search/companies/%s", companyNumber);
 
-        CompanyProfileApi companyProfile = deserialiser.deserialiseCompanyProfile(data.getData());
+        CompanyProfileApi companyProfile = deserialiser.mapToCompanyProfile(data.getData());
 
-        apiClientService
+        logger.debug("Attempting to upsert company profile for company number: %s".formatted(companyNumber));
+        ApiResponse<Void> apiResponse = apiClientService
                 .getInternalApiClient()
+                .get()
                 .privateSearchResourceHandler()
                 .advancedCompanySearch()
                 .upsertCompanyProfile(formattedUri, companyProfile)
                 .execute();
+
+        logger.debug("API Response: [Status Code: %d, Errors: %d]...".formatted(apiResponse.getStatusCode(),
+                apiResponse.getErrors().size()));
     }
 
 }

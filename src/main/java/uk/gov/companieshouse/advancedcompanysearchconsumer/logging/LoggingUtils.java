@@ -11,7 +11,6 @@ public class LoggingUtils {
     private LoggingUtils() {}
 
     public static Map<String, Object> getLogMap(final ResourceChangedData message) {
-
         final var resourceId = message.getResourceId();
         final var resourceKind = message.getResourceKind();
         final var resourceUri = message.getResourceUri();
