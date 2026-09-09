@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.config.KafkaConfigTest;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
 @SpringBootTest
-@Import(KafkaConfigTest.class)
+@Import(TestKafkaConfig.class)
 @ActiveProfiles("test_main_positive")
 class ApplicationTests {
     

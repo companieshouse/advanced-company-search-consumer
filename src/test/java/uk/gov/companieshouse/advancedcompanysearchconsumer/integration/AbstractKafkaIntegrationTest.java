@@ -8,12 +8,12 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import uk.gov.companieshouse.advancedcompanysearchconsumer.config.KafkaConfigTest;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
 import java.time.Duration;
 
 @Testcontainers
-@Import(KafkaConfigTest.class)
+@Import(TestKafkaConfig.class)
 public abstract class AbstractKafkaIntegrationTest {
 
     @Container

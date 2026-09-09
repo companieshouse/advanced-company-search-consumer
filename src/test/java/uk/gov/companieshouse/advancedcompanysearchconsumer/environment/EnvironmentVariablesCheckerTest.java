@@ -20,11 +20,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.config.KafkaConfigTest;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
 
 @SpringBootTest
 @ActiveProfiles("test_main_positive")
-@Import(KafkaConfigTest.class)
+@Import(TestKafkaConfig.class)
 class EnvironmentVariablesCheckerTest {
 
     private static final String TOKEN_VALUE = "token value";
