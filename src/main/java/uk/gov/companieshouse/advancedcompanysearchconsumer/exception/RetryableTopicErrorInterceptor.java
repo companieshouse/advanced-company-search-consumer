@@ -34,8 +34,8 @@ public class RetryableTopicErrorInterceptor implements ProducerInterceptor<Strin
     }
 
     @Override
-    public void onAcknowledgement(RecordMetadata recordMetadata, Exception ex) {
-        LOGGER.info("onAcknowledgement() method called.", DataMapHolder.getLogMap());
+    public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
+        LOGGER.info("onAcknowledgement(topic=%s) method called.".formatted(metadata.topic()), DataMapHolder.getLogMap());
     }
 
     @Override
@@ -44,8 +44,8 @@ public class RetryableTopicErrorInterceptor implements ProducerInterceptor<Strin
     }
 
     @Override
-    public void configure(Map<String, ?> map) {
-        LOGGER.info("close(config=%s) method called.".formatted(map), DataMapHolder.getLogMap());
+    public void configure(Map<String, ?> config) {
+        LOGGER.info("close(config=%d items) method called.".formatted(config.size()), DataMapHolder.getLogMap());
     }
 
     private String getNextErrorTopic(ProducerRecord<String, Object> message) {

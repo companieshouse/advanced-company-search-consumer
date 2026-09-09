@@ -1,9 +1,13 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.kafka.support.KafkaHeaders.EXCEPTION_CAUSE_FQCN;
 import static org.springframework.kafka.support.KafkaHeaders.EXCEPTION_STACKTRACE;
 
@@ -206,6 +210,8 @@ class RetryableTopicErrorInterceptorTest {
         Exception exception = new RuntimeException("test");
 
         underTest.onAcknowledgement(metadata, exception);
+
+        verify(metadata, times(1)).topic();
     }
 
     @Test
@@ -213,11 +219,13 @@ class RetryableTopicErrorInterceptorTest {
         RecordMetadata metadata = mock(RecordMetadata.class);
 
         underTest.onAcknowledgement(metadata, null);
+
+        verify(metadata, times(1)).topic();
     }
 
     @Test
     void close_shouldNotThrowException() {
-        underTest.close();
+        assertDoesNotThrow(() -> underTest.close());
     }
 
     @Test
@@ -225,5 +233,7 @@ class RetryableTopicErrorInterceptorTest {
         Map<String, Object> config = Collections.singletonMap("test", "value");
 
         underTest.configure(config);
+
+        assertThat(config).containsEntry("test", "value");
     }
 }
