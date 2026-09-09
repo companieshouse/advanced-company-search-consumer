@@ -39,6 +39,8 @@ import uk.gov.companieshouse.service.ServiceResultStatus;
 import uk.gov.companieshouse.service.rest.response.ResponseEntityFactory;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
+import uk.gov.companieshouse.advancedcompanysearchconsumer.deserialiser.LocalDeserialiser;
+
 @Configuration
 @EnableKafka
 public class KafkaConfig {
@@ -73,14 +75,14 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         config.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-        config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, StringDeserializer.class);
+        config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, LocalDeserialiser.class);
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
         ErrorHandlingDeserializer<@NonNull ResourceChangedData> errorDeserializer = new ErrorHandlingDeserializer<>(
                 new AvroDeserializer<>(ResourceChangedData.class));
 
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), errorDeserializer);
+        return new DefaultKafkaConsumerFactory<>(config, new LocalDeserialiser(), errorDeserializer);
     }
 
     @Bean
