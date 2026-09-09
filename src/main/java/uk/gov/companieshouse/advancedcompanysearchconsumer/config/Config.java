@@ -36,6 +36,8 @@ import uk.gov.companieshouse.service.ServiceResultStatus;
 import uk.gov.companieshouse.service.rest.response.ResponseEntityFactory;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
+import uk.gov.companieshouse.advancedcompanysearchconsumer.deserialiser.LocalDeserialiser;
+
 @Configuration
 @EnableKafka
 public class Config {
@@ -54,7 +56,7 @@ public class Config {
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class,
                 ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class,
-                ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, StringDeserializer.class,
+                ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, LocalDeserialiser.class,
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest",
                 ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"),
             new StringDeserializer(),
