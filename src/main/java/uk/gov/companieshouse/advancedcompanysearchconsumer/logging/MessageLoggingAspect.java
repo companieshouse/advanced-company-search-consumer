@@ -33,6 +33,12 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 @Aspect
 public class MessageLoggingAspect {
 
+    private final Logger logger;
+
+    public MessageLoggingAspect(final Logger logger) {
+        this.logger = logger;
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 
     private static final String LOG_MESSAGE_RECEIVED = "Processing delta";
@@ -64,7 +70,7 @@ public class MessageLoggingAspect {
         Long offset = Optional.ofNullable((Long) incomingMessage.getHeaders()
                         .get(KafkaHeaders.OFFSET)).orElse(0L);
 
-        LOGGER.debug(logMessage, new HashMap<>(Map.of(
+        logger.debug(logMessage, new HashMap<>(Map.of(
                 "topic", topic,
                 "partition", partition,
                 "offset", offset)));

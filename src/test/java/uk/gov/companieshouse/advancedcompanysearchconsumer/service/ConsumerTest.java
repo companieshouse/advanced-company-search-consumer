@@ -43,7 +43,7 @@ class ConsumerTest {
 
     @BeforeEach
     void setUp() {
-        consumer = new Consumer(service, messageFlags, logger);
+        consumer = new Consumer(service, logger);
 
         payload = TestConstants.UPDATE;
 
