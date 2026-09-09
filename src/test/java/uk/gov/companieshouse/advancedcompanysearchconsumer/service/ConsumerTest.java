@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.MessageFlags;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants;
 import uk.gov.companieshouse.logging.Logger;
@@ -30,9 +28,6 @@ class ConsumerTest {
 
     @Mock
     private Service service;
-
-    @Mock
-    private MessageFlags messageFlags;
 
     @Mock
     private Message<@NonNull ResourceChangedData> message;
@@ -58,8 +53,6 @@ class ConsumerTest {
                 argThat(parameters ->
                         parameters.getData() == payload)
         );
-
-        verify(messageFlags, never()).setRetryable(true);
     }
 
     @Test
@@ -74,8 +67,6 @@ class ConsumerTest {
         );
 
         assertSame(retryableException, thrownException);
-
-        verify(messageFlags).setRetryable(true);
     }
 
     @Test
@@ -90,8 +81,6 @@ class ConsumerTest {
         );
 
         assertSame(runtimeException, thrownException);
-
-        verify(messageFlags, never()).setRetryable(true);
     }
 
     @Test
