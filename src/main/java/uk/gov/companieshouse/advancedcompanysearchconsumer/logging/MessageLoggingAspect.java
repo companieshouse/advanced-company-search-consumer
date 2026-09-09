@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.logging;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +13,6 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.service.Consumer;
 import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 
 /**
  * Logs message details before and after it has been processed by
@@ -38,8 +35,6 @@ public class MessageLoggingAspect {
     public MessageLoggingAspect(final Logger logger) {
         this.logger = logger;
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 
     private static final String LOG_MESSAGE_RECEIVED = "Processing delta";
     private static final String LOG_MESSAGE_PROCESSED = "Processed delta";

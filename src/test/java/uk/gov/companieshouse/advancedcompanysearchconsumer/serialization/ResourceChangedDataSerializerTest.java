@@ -16,11 +16,11 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 @ExtendWith(MockitoExtension.class)
 class ResourceChangedDataSerializerTest {
 
-    private ResourceChangedDataSerializer serializer;
+    private ResourceChangedDataSerializer underTest;
 
     @BeforeEach
     public void init() {
-        serializer = new ResourceChangedDataSerializer();
+        underTest = new ResourceChangedDataSerializer();
     }
 
     @Test
@@ -29,21 +29,21 @@ class ResourceChangedDataSerializerTest {
         eventRecord.setPublishedAt("2022010351");
         eventRecord.setType("charges");
         ResourceChangedData resourceChangedData = new ResourceChangedData("resource_kind","resource_uri","context_id","resource_id","data",eventRecord);
-        byte[] result = serializer.serialize("", resourceChangedData);
+        byte[] result = underTest.serialize("", resourceChangedData);
 
         assertThat(decodedData(result)).isEqualTo(resourceChangedData);
     }
 
     @Test
     void When_serialize_null_returns_null() {
-        byte[] serialize = serializer.serialize("", null);
+        byte[] serialize = underTest.serialize("", null);
         assertThat(serialize).isEmpty();
     }
 
     @Test
     void When_serialize_receivesBytes_returnsBytes() {
         byte[] byteExample = "Sample bytes".getBytes();
-        byte[] serialize = serializer.serialize("", byteExample);
+        byte[] serialize = underTest.serialize("", byteExample);
         assertThat(serialize).isEqualTo(byteExample);
     }
 
@@ -51,7 +51,7 @@ class ResourceChangedDataSerializerTest {
     void When_serializeFails_throwsNonRetryableError() {
         Object payload = mock(Object.class);
         when(payload.toString()).thenThrow(new RuntimeException());
-        assertThrows(NonRetryableErrorException.class, () -> serializer.serialize("", payload));
+        assertThrows(NonRetryableErrorException.class, () -> underTest.serialize("", payload));
     }
 
     private ResourceChangedData decodedData(byte[] resourceChangedData) {

@@ -7,8 +7,6 @@ import static org.mockito.Mockito.verify;
 import java.util.Collections;
 import java.util.Map;
 import org.aspectj.lang.JoinPoint;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,17 +29,9 @@ class MessageLoggingAspectTest {
 
     private MessageLoggingAspect aspect;
 
-    @BeforeAll
-    static void captureOriginalLogger() throws Exception {
-    }
-
     @BeforeEach
-    void injectMockLogger() throws Exception {
+    void injectMockLogger() {
         aspect = new MessageLoggingAspect(mockLogger);
-    }
-
-    @AfterEach
-    void restoreOriginalLogger() throws Exception {
     }
 
     private Message<?> messageWithHeaders(String topic, Integer partition, Long offset) {
