@@ -18,9 +18,7 @@ import uk.gov.companieshouse.logging.Logger;
 public class AdvancedIndexUpdaterService implements Service {
 
     private final Logger logger;
-
     private final AdvancedIndexDeleteService advancedIndexDeleteService;
-
     private final AdvancedIndexUpsertService advancedIndexUpsertService;
 
     public AdvancedIndexUpdaterService(Logger logger, AdvancedIndexDeleteService advancedIndexDeleteService, AdvancedIndexUpsertService advancedIndexUpsertService) {
@@ -40,8 +38,7 @@ public class AdvancedIndexUpdaterService implements Service {
         final var resourceUri = message.getResourceUri();
 
         logger.info("Processing message " + message + " for resource ID " + resourceId +
-            ", resource kind " + resourceKind + ", resource URI " + resourceUri + ".",
-            getLogMap(message));
+            ", resource kind " + resourceKind + ", resource URI " + resourceUri + ".", getLogMap(message));
 
         try {
             var messageType = message.getEvent().getType();
@@ -61,7 +58,10 @@ public class AdvancedIndexUpdaterService implements Service {
                 }
             }
 
-        }catch (ApiErrorResponseException apiException) {
+            logger.debug("Successfully processed message for resource ID " + resourceId +
+                ", resource kind " + resourceKind + ", resource URI " + resourceUri + ".", getLogMap(message));
+
+        } catch (ApiErrorResponseException apiException) {
             logger.error(String.format("Error response from INTERNAL API: %s", apiException));
             throw new RetryableException("Attempting to retry due to failed API response", apiException);
 

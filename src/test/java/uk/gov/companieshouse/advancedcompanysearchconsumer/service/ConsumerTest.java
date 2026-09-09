@@ -19,10 +19,14 @@ import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableEx
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.MessageFlags;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants;
+import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @ExtendWith(MockitoExtension.class)
 class ConsumerTest {
+
+    @Mock
+    private Logger logger;
 
     @Mock
     private Service service;
@@ -39,7 +43,7 @@ class ConsumerTest {
 
     @BeforeEach
     void setUp() {
-        consumer = new Consumer(service, messageFlags);
+        consumer = new Consumer(service, messageFlags, logger);
 
         payload = TestConstants.UPDATE;
 
