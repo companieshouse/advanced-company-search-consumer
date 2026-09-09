@@ -109,7 +109,7 @@ public class KafkaConfig {
                         .getLogMap();
 
                 final String error = "Caught SerializationException serializing kafka message: " + e.getMessage();
-                getLogger().error(error, dataMap);
+                LOGGER.error(error, dataMap);
 
                 throw new NonRetryableException(error, e);
             }
@@ -145,12 +145,5 @@ public class KafkaConfig {
         factory.setConcurrency(concurrency);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
         return factory;
-    }
-
-    @Bean
-    Logger getLogger() {
-        LOGGER.info("getLogger() method called.");
-
-        return LoggerFactory.getLogger(NAMESPACE);
     }
 }

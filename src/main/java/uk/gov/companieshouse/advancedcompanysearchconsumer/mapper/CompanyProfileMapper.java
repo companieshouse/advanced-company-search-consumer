@@ -4,7 +4,7 @@ import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NA
 
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.logging.Logger;
@@ -15,16 +15,16 @@ public class CompanyProfileMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 
-    private final ObjectMapper objectMapper;
+    private final JsonMapper mapper;
 
-    public CompanyProfileMapper(final ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public CompanyProfileMapper(final JsonMapper newMapper) {
+        this.mapper = newMapper;
     }
 
     public CompanyProfileApi mapToCompanyProfile(final String data) {
         LOGGER.info("mapToCompanyProfile(data=%s) method called.".formatted(data));
         try {
-            return objectMapper.readValue(data, CompanyProfileApi.class);
+            return mapper.readValue(data, CompanyProfileApi.class);
 
         } catch (JacksonException e) {
             LOGGER.errorContext( "Unable to parse message payload data", e, null);

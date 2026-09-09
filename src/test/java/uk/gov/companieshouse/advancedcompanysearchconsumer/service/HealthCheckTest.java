@@ -11,12 +11,12 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.config.TestKafkaConfig;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.config.KafkaConfigTest;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test_main_positive")
-@Import(TestKafkaConfig.class)
+@Import(KafkaConfigTest.class)
 class HealthCheckTest {
 
     @Autowired

@@ -14,12 +14,12 @@ public class AdvancedIndexUpsertService {
 
     private final Logger logger;
     private final ApiClientService apiClientService;
-    private final CompanyProfileMapper deserialiser;
+    private final CompanyProfileMapper mapper;
 
-    public AdvancedIndexUpsertService(Logger logger, ApiClientService apiClientService, CompanyProfileMapper deserialiser) {
+    public AdvancedIndexUpsertService(Logger logger, ApiClientService apiClientService, CompanyProfileMapper mapper) {
         this.logger = logger;
         this.apiClientService = apiClientService;
-        this.deserialiser = deserialiser;
+        this.mapper = mapper;
     }
 
     public void upsertCompanyProfileService(ResourceChangedData data) throws ApiErrorResponseException, URIValidationException {
@@ -28,7 +28,7 @@ public class AdvancedIndexUpsertService {
         String companyNumber = data.getResourceId();
         String formattedUri = String.format("/advanced-search/companies/%s", companyNumber);
 
-        CompanyProfileApi companyProfile = deserialiser.mapToCompanyProfile(data.getData());
+        CompanyProfileApi companyProfile = mapper.mapToCompanyProfile(data.getData());
 
         logger.debug("Attempting to upsert company profile for company number: %s".formatted(companyNumber));
         ApiResponse<Void> apiResponse = apiClientService
@@ -39,8 +39,8 @@ public class AdvancedIndexUpsertService {
                 .upsertCompanyProfile(formattedUri, companyProfile)
                 .execute();
 
-        logger.debug("API Response: [Status Code: %d, Errors: %d]...".formatted(apiResponse.getStatusCode(),
-                apiResponse.getErrors().size()));
+        logger.debug("API Response: [Status Code: %d, Errors: %d]...".formatted(
+                apiResponse.getStatusCode(), apiResponse.getErrors().size()));
     }
 
 }

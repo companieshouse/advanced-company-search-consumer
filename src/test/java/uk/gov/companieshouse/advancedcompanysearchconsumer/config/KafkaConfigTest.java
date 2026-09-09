@@ -27,7 +27,7 @@ import uk.gov.companieshouse.kafka.serialization.SerializerFactory;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @TestConfiguration
-public class TestKafkaConfig {
+public class KafkaConfigTest {
 
     @Bean
     CountDownLatch latch(@Value("${steps}") int steps) {

@@ -37,7 +37,7 @@ class AdvancedIndexUpsertServiceTest {
     private ApiClientService apiClientService;
 
     @Mock
-    private CompanyProfileMapper deserialiser;
+    private CompanyProfileMapper mapper;
 
     @Mock
     private ResourceChangedData data;
@@ -64,15 +64,14 @@ class AdvancedIndexUpsertServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new AdvancedIndexUpsertService(logger, apiClientService, deserialiser);
-
+        service = new AdvancedIndexUpsertService(logger, apiClientService, mapper);
     }
 
     private void setupMocks() throws ApiErrorResponseException, URIValidationException {
         when(data.getResourceId()).thenReturn("12345678");
         when(data.getData()).thenReturn("company profile data");
 
-        when(deserialiser.mapToCompanyProfile("company profile data")).thenReturn(companyProfile);
+        when(mapper.mapToCompanyProfile("company profile data")).thenReturn(companyProfile);
         when(apiClientService.getInternalApiClient()).thenReturn(apiClientSupplier);
         when(apiClientSupplier.get()).thenReturn(apiClient);
         when(apiClient.privateSearchResourceHandler()).thenReturn(resourceHandler);
@@ -90,7 +89,7 @@ class AdvancedIndexUpsertServiceTest {
 
         service.upsertCompanyProfileService(data);
 
-        verify(deserialiser).mapToCompanyProfile("company profile data");
+        verify(mapper).mapToCompanyProfile("company profile data");
         verify(apiClientService).getInternalApiClient();
         verify(apiClient).privateSearchResourceHandler();
         verify(resourceHandler).advancedCompanySearch();
@@ -118,7 +117,7 @@ class AdvancedIndexUpsertServiceTest {
 
         service.upsertCompanyProfileService(data);
 
-        verify(deserialiser).mapToCompanyProfile("company profile data");
+        verify(mapper).mapToCompanyProfile("company profile data");
         verify(searchHandler).upsertCompanyProfile("/advanced-search/companies/12345678", companyProfile);
     }
 
@@ -159,13 +158,13 @@ class AdvancedIndexUpsertServiceTest {
     void shouldNotCallApiWhenDeserialisationFails() {
         NonRetryableException exception = new NonRetryableException("Unable to deserialise company profile", null);
 
-        when(deserialiser.mapToCompanyProfile(anyString())).thenThrow(exception);
+        when(mapper.mapToCompanyProfile(anyString())).thenThrow(exception);
 
         assertThrows(RuntimeException.class,
                 () -> service.upsertCompanyProfileService(data)
         );
 
-        verify(deserialiser).mapToCompanyProfile(data.getData());
+        verify(mapper).mapToCompanyProfile(data.getData());
         verify(searchHandler, never()).upsertCompanyProfile(anyString(), any());
     }
 }

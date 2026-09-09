@@ -50,15 +50,19 @@ public class InvalidMessageRouter implements ProducerInterceptor<String, Resourc
     @Override
     public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
         // No specific implementation is required in this case.
+        LOGGER.info("onAcknowledgement() method called.");
     }
 
     @Override
     public void close() {
         // No specific implementation is required in this case.
+        LOGGER.info("close() method called.");
     }
 
     @Override
     public void configure(Map<String, ?> configs) {
+        LOGGER.info("configure(configs=%s) method called.".formatted(configs));
+
         this.messageFlags = (MessageFlags) configs.get("message.flags");
         this.invalidMessageTopic = (String) configs.get("invalid.message.topic");
     }

@@ -11,9 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import tools.jackson.core.JacksonException;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 
@@ -21,10 +20,10 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 class CompanyProfileMapperTest {
 
     @Mock
-    private ObjectMapper mockObjectMapper;
+    private JsonMapper mockObjectMapper;
 
     @InjectMocks
-    private CompanyProfileMapper deserialiser;
+    private CompanyProfileMapper mapper;
 
     @Test
     void whenDeserialisationSuccessful_thenReturnCompanyProfileApi() throws JacksonException {
@@ -33,7 +32,7 @@ class CompanyProfileMapperTest {
         when(mockObjectMapper.readValue(testData, CompanyProfileApi.class))
                 .thenReturn(mock(CompanyProfileApi.class));
 
-        assertNotNull(deserialiser.mapToCompanyProfile("Dummy Data"));
+        assertNotNull(mapper.mapToCompanyProfile("Dummy Data"));
     }
 
     @Test
@@ -45,7 +44,7 @@ class CompanyProfileMapperTest {
                 .thenThrow(mockException);
 
         final var exception = assertThrows(NonRetryableException.class, () ->
-            deserialiser.mapToCompanyProfile(testData));
+            mapper.mapToCompanyProfile(testData));
 
         assertThat(exception.getMessage()).isEqualTo("Unable to parse message payload data");
         assertThat(exception.getCause()).isEqualTo(mockException);

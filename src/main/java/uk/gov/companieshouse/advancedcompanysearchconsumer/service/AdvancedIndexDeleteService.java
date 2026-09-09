@@ -31,7 +31,7 @@ public class AdvancedIndexDeleteService {
                 .deleteCompanyProfile(formattedUri)
                 .execute();
 
-        logger.debug("API Response: [Status Code: %d, Errors: %d]...".formatted(apiResponse.getStatusCode(),
-                apiResponse.getErrors().size()));
+        logger.debug("API Response: [Status Code: %d, Errors: %d]...".formatted(
+                apiResponse.getStatusCode(), apiResponse.getErrors().size()));
     }
 }
