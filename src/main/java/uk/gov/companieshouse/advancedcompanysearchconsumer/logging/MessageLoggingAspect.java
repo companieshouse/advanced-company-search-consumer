@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.logging;
 
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.Application.NAMESPACE;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +13,6 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.service.Consumer;
 import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 
 /**
  * Logs message details before and after it has been processed by
@@ -33,7 +30,11 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 @Aspect
 public class MessageLoggingAspect {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
+    private final Logger logger;
+
+    public MessageLoggingAspect(final Logger logger) {
+        this.logger = logger;
+    }
 
     private static final String LOG_MESSAGE_RECEIVED = "Processing delta";
     private static final String LOG_MESSAGE_PROCESSED = "Processed delta";
@@ -64,7 +65,7 @@ public class MessageLoggingAspect {
         Long offset = Optional.ofNullable((Long) incomingMessage.getHeaders()
                         .get(KafkaHeaders.OFFSET)).orElse(0L);
 
-        LOGGER.debug(logMessage, new HashMap<>(Map.of(
+        logger.debug(logMessage, new HashMap<>(Map.of(
                 "topic", topic,
                 "partition", partition,
                 "offset", offset)));

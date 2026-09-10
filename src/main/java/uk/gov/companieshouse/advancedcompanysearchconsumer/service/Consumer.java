@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
+import java.time.Duration;
+import java.time.Instant;
 import org.jspecify.annotations.NonNull;
 import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,8 +10,8 @@ import org.springframework.kafka.retrytopic.DltStrategy;
 import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.MessageFlags;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.logging.DataMapHolder;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
@@ -21,26 +23,13 @@ import uk.gov.companieshouse.stream.ResourceChangedData;
 public class Consumer {
 
     private final Service service;
-    private final MessageFlags messageFlags;
     private final Logger logger;
 
-    public Consumer(Service service, MessageFlags messageFlags, Logger logger) {
+    public Consumer(Service service, Logger logger) {
         this.service = service;
-        this.messageFlags = messageFlags;
         this.logger = logger;
     }
 
-    /**
-     * Consume a message from the main Kafka topic.
-     *
-     * @param message A message containing a payload.
-     */
-    @KafkaListener(
-            id = "${consumer.group_id}",
-            containerFactory = "kafkaListenerContainerFactory",
-            topics = "${consumer.topic}",
-            groupId = "${consumer.group_id}"
-    )
     @RetryableTopic(
             attempts = "${consumer.max_attempts}",
             autoCreateTopics = "false",
@@ -49,16 +38,37 @@ public class Consumer {
             dltTopicSuffix = "-${consumer.group_id}-error",
             dltStrategy = DltStrategy.FAIL_ON_ERROR,
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
-            include = RetryableException.class
+            exclude = NonRetryableException.class
     )
-    public void consume(final Message<@NonNull ResourceChangedData> message) {
-        logger.info("consume(resource_id=%s) method called.".formatted(message.getPayload().getResourceId()));
+    @KafkaListener(
+            id = "${consumer.topic}-consumer",
+            topics = "${consumer.topic}",
+            groupId = "${consumer.group_id}",
+            autoStartup = "true",
+            containerFactory = "listenerContainerFactory"
+    )
+    public void consume(Message<@NonNull ResourceChangedData> message) {
+        logger.info("consume(kind=%s) method called.".formatted(
+                message.getPayload().getResourceKind()), DataMapHolder.getLogMap());
+
+        Instant startTime = Instant.now();
+
+        ResourceChangedData payload = message.getPayload();
+        String contextId = payload.getContextId();
+
         try {
             service.processMessage(new ServiceParameters(message.getPayload()));
 
-        } catch (RetryableException e) {
-            messageFlags.setRetryable(true);
-            throw e;
+            long messageProcessingTime = Duration.between(startTime, Instant.now()).toMillis();
+
+            logger.info("Message Processed [%s]: %d milliseconds".formatted(payload.getResourceKind(),
+                    messageProcessingTime), DataMapHolder.getLogMap());
+
+        } catch (Exception exception) {
+            logger.errorContext(contextId, "Exception occurred while processing message",
+                    exception, DataMapHolder.getLogMap());
+
+            throw exception;
         }
     }
 }

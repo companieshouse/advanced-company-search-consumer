@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.databind.json.JsonMapper;
+import uk.gov.companieshouse.kafka.serialization.SerializerFactory;
 import uk.gov.companieshouse.logging.Logger;
 
 @ExtendWith(MockitoExtension.class)
@@ -17,6 +18,13 @@ class ApplicationConfigTest {
     @BeforeEach
     void setUp() {
         underTest = new ApplicationConfig();
+    }
+
+    @Test
+    void testSerializerFactory_isNotNull() {
+        SerializerFactory result = underTest.serializerFactory();
+
+        assertThat(result).isNotNull();
     }
 
     @Test
