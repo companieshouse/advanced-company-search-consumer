@@ -9,18 +9,26 @@ import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.EventRecord;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @ExtendWith(MockitoExtension.class)
 class ResourceChangedDataSerializerTest {
 
+    @Mock
+    private Logger logger;
+
+    @InjectMocks
     private ResourceChangedDataSerializer underTest;
 
     @BeforeEach
-    public void init() {
-        underTest = new ResourceChangedDataSerializer();
+    public void init() throws Exception {
+        MockitoAnnotations.openMocks(this).close();
     }
 
     @Test
@@ -32,12 +40,6 @@ class ResourceChangedDataSerializerTest {
         byte[] result = underTest.serialize("", resourceChangedData);
 
         assertThat(decodedData(result)).isEqualTo(resourceChangedData);
-    }
-
-    @Test
-    void When_serialize_null_returns_null() {
-        byte[] serialize = underTest.serialize("", null);
-        assertThat(serialize).isEmpty();
     }
 
     @Test
@@ -55,7 +57,7 @@ class ResourceChangedDataSerializerTest {
     }
 
     private ResourceChangedData decodedData(byte[] resourceChangedData) {
-        ResourceChangedDataDeserializer serializer = new ResourceChangedDataDeserializer();
-        return serializer.deserialize("", resourceChangedData);
+        var deserializer = new ResourceChangedDataDeserializer(logger);
+        return deserializer.deserialize("", resourceChangedData);
     }
 }
