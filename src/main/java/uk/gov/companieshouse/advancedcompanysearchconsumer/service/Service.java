@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 /**
  * Processes an incoming message.
  */

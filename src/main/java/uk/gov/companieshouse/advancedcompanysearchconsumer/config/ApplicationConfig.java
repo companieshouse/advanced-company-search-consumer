@@ -21,11 +21,15 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
     @Bean
     SerializerFactory serializerFactory() {
+        LOGGER.info("serializerFactory() method called.");
+
         return new SerializerFactory();
     }
 
     @Bean
     JsonMapper jsonMapper() {
+        LOGGER.info("jsonMapper() method called.");
+
         return JsonMapper.builder()
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .changeDefaultPropertyInclusion(incl ->

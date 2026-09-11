@@ -30,7 +30,7 @@ class ResourceChangedDataDeserializerTest {
     }
 
     @Test
-    void When_deserialize_Expect_ValidResourceChangedDataObject() {
+    void whenDeserializedExpectValidResourceChangedDataObject() {
         EventRecord eventRecord = new EventRecord();
         eventRecord.setPublishedAt("2022010351");
         eventRecord.setType("charges");
@@ -46,14 +46,14 @@ class ResourceChangedDataDeserializerTest {
         assertThat(deserializedObject).isEqualTo(resourceChangedData);
     }
 
+    @Test
+    void whenDeserializedFailsThrowsNonRetryableError() {
+        byte[] data = "Invalid message".getBytes();
+        assertThrows(NonRetryableErrorException.class, () -> deserializer.deserialize("", data));
+    }
+
     private byte[] encodedData(ResourceChangedData resourceChangedData){
         var serializer = new ResourceChangedDataSerializer(logger);
         return serializer.serialize("", resourceChangedData);
-    }
-
-    @Test
-    void When_deserializeFails_throwsNonRetryableError() {
-        byte[] data = "Invalid message".getBytes();
-        assertThrows(NonRetryableErrorException.class, () -> deserializer.deserialize("", data));
     }
 }

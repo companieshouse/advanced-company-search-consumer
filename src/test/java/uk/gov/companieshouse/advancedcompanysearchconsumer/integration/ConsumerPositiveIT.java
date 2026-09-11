@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import uk.gov.companieshouse.advancedcompanysearchconsumer.service.Service;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.service.ServiceParameters;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.ERROR_TOPIC;

@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.advancedcompanysearchconsumer.exception;
+package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
 import static java.lang.String.format;
 import static org.springframework.kafka.support.KafkaHeaders.EXCEPTION_CAUSE_FQCN;
@@ -18,6 +18,7 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class RetryableTopicErrorInterceptor implements ProducerInterceptor<String, Object> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
+    private static final String NON_RETRYABLE_ERROR_CLASS_NAME = NonRetryableErrorException.class.getName();
 
     @Override
     public ProducerRecord<String, Object> onSend(ProducerRecord<String, Object> message) {
@@ -48,18 +49,25 @@ public class RetryableTopicErrorInterceptor implements ProducerInterceptor<Strin
         LOGGER.info("close(config=%d items) method called.".formatted(config.size()), DataMapHolder.getLogMap());
     }
 
-    private String getNextErrorTopic(ProducerRecord<String, Object> message) {
+    private String getHeaderValue(final ProducerRecord<String, Object> message, final String headerKey) {
+        Header header = message.headers().lastHeader(headerKey);
+        return header != null ? new String(header.value()) : "";
+    }
+
+    private String getNextErrorTopic(final ProducerRecord<String, Object> message) {
         LOGGER.info("getNextErrorTopic(topic=%s) method called.".formatted(message.topic()), DataMapHolder.getLogMap());
 
-        Header header1 = message.headers().lastHeader(EXCEPTION_CAUSE_FQCN);
-        Header header2 = message.headers().lastHeader(EXCEPTION_STACKTRACE);
+        String kafkaExceptionCauseHeader = getHeaderValue(message, EXCEPTION_CAUSE_FQCN);
+        String kafkaExceptionStackHeader = getHeaderValue(message, EXCEPTION_STACKTRACE);
 
-        String nextErrorTopic = ((header1 != null
-                && new String(header1.value()).contains(NonRetryableErrorException.class.getName()))
-                || (header2 != null
-                && new String(header2.value()).contains(
-                        NonRetryableErrorException.class.getName())))
-                ? message.topic().replace("-error", "-invalid") : message.topic();
+        boolean isNonRetryableError = kafkaExceptionCauseHeader.contains(NON_RETRYABLE_ERROR_CLASS_NAME) ||
+                kafkaExceptionStackHeader.contains(NON_RETRYABLE_ERROR_CLASS_NAME);
+
+        String nextErrorTopic = message.topic();
+
+        if (isNonRetryableError) {
+            nextErrorTopic = message.topic().replace("-error", "-invalid");
+        }
 
         LOGGER.debug("Next error topic determined: %s".formatted(nextErrorTopic), DataMapHolder.getLogMap());
 

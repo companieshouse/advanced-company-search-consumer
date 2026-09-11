@@ -29,7 +29,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- Spring Boot Dependencies -->
-        <spring-boot-dependencies.version>4.1.1</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>4.2.0-M1</spring-boot-dependencies.version>
 
         <!-- Build Dependencies -->
         <spring-boot-maven-plugin.version>${spring-boot-dependencies.version}</spring-boot-maven-plugin.version>
@@ -42,7 +42,7 @@
         <skip.integration.tests>false</skip.integration.tests>
 
         <!-- Internal Dependencies -->
-        <ch-boms.version>0.1.17</ch-boms.version>
+        <ch-boms.version>0.1.21</ch-boms.version>
         <private-api-sdk-java.version>7.2.22</private-api-sdk-java.version>
 
         <!-- 3rd Party Dependencies -->
@@ -51,8 +51,6 @@
         <!-- Testing -->
         <test-containers.version>1.21.4</test-containers.version>
         <system-lambda.version>1.2.1</system-lambda.version>
-        <junit-jupiter.version>5.13.4</junit-jupiter.version>
-        <junit-platform.version>1.13.4</junit-platform.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
 
         <jib-maven-plugin.server>416670754337.dkr.ecr.eu-west-2.amazonaws.com</jib-maven-plugin.server>
@@ -366,9 +364,9 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <excludes>
+                        <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITest.java</exclude>
                         <exclude>**/*IntegrationTest.java</exclude>
-                        <exclude>**/*IT.java</exclude>
                     </excludes>
                     <argLine>
                         ${surefireArgLine}
@@ -406,7 +404,9 @@
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <skipITs>${skip.integration.tests}</skipITs>
                     <includes>
+                        <include>**/*IT.java</include>
                         <include>**/*ITest.java</include>
+                        <exclude>**/*IntegrationTest.java</exclude>
                     </includes>
                 </configuration>
             </plugin>
