@@ -366,9 +366,9 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <excludes>
+                        <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITest.java</exclude>
                         <exclude>**/*IntegrationTest.java</exclude>
-                        <exclude>**/*IT.java</exclude>
                     </excludes>
                     <argLine>
                         ${surefireArgLine}
@@ -406,7 +406,9 @@
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <skipITs>${skip.integration.tests}</skipITs>
                     <includes>
+                        <include>**/*IT.java</include>
                         <include>**/*ITest.java</include>
+                        <exclude>**/*IntegrationTest.java</exclude>
                     </includes>
                 </configuration>
             </plugin>

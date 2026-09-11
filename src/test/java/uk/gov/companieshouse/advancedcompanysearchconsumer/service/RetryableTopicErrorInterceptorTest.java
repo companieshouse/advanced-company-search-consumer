@@ -22,7 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableTopicErrorInterceptor;
 
 @ExtendWith(MockitoExtension.class)
 class RetryableTopicErrorInterceptorTest {
@@ -47,18 +46,10 @@ class RetryableTopicErrorInterceptorTest {
     @Test
     void onSend_shouldReturnInvalidTopic_whenCauseHeaderContainsNonRetryableException() {
         RecordHeaders headers = new RecordHeaders();
-        headers.add(
-                EXCEPTION_CAUSE_FQCN,
-                NonRetryableErrorException.class.getName()
-                        .getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_CAUSE_FQCN, NonRetryableErrorException.class.getName().getBytes(StandardCharsets.UTF_8));
 
-        ProducerRecord<String, Object> message =
-                new ProducerRecord<>(
-                        "company-search-error",
-                        null,
-                        "key",
-                        "value",
-                        headers);
+        ProducerRecord<String, Object> message = new ProducerRecord<>("company-search-error",
+                        null,"key","value", headers);
 
         ProducerRecord<String, Object> result = underTest.onSend(message);
 
@@ -71,20 +62,11 @@ class RetryableTopicErrorInterceptorTest {
     @Test
     void onSend_shouldReturnInvalidTopic_whenStackTraceHeaderContainsNonRetryableException() {
         RecordHeaders headers = new RecordHeaders();
-        headers.add(
-                EXCEPTION_STACKTRACE,
-                ("some stack trace: "
-                        + NonRetryableErrorException.class.getName()
-                        + ": invalid data")
-                        .getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_STACKTRACE, ("some stack trace: "+ NonRetryableErrorException.class.getName()
+                        + ": invalid data").getBytes(StandardCharsets.UTF_8));
 
-        ProducerRecord<String, Object> message =
-                new ProducerRecord<>(
-                        "company-search-error",
-                        null,
-                        "key",
-                        "value",
-                        headers);
+        ProducerRecord<String, Object> message = new ProducerRecord<>("company-search-error",
+                        null,"key","value", headers);
 
         ProducerRecord<String, Object> result = underTest.onSend(message);
 
@@ -152,23 +134,11 @@ class RetryableTopicErrorInterceptorTest {
     void onSend_shouldReturnInvalidTopic_whenBothHeadersExistAndCauseIsNonRetryable() {
         RecordHeaders headers = new RecordHeaders();
 
-        headers.add(
-                EXCEPTION_CAUSE_FQCN,
-                NonRetryableErrorException.class.getName()
-                        .getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_CAUSE_FQCN, NonRetryableErrorException.class.getName().getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_STACKTRACE, "some.other.Exception".getBytes(StandardCharsets.UTF_8));
 
-        headers.add(
-                EXCEPTION_STACKTRACE,
-                "some.other.Exception"
-                        .getBytes(StandardCharsets.UTF_8));
-
-        ProducerRecord<String, Object> message =
-                new ProducerRecord<>(
-                        "company-search-error",
-                        null,
-                        "key",
-                        "value",
-                        headers);
+        ProducerRecord<String, Object> message = new ProducerRecord<>("company-search-error",
+                        null,"key","value", headers);
 
         ProducerRecord<String, Object> result = underTest.onSend(message);
 
@@ -180,23 +150,11 @@ class RetryableTopicErrorInterceptorTest {
     void onSend_shouldReturnInvalidTopic_whenBothHeadersExistAndStackTraceIsNonRetryable() {
         RecordHeaders headers = new RecordHeaders();
 
-        headers.add(
-                EXCEPTION_CAUSE_FQCN,
-                "some.other.Exception"
-                        .getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_CAUSE_FQCN, "some.other.Exception".getBytes(StandardCharsets.UTF_8));
+        headers.add(EXCEPTION_STACKTRACE, NonRetryableErrorException.class.getName().getBytes(StandardCharsets.UTF_8));
 
-        headers.add(
-                EXCEPTION_STACKTRACE,
-                NonRetryableErrorException.class.getName()
-                        .getBytes(StandardCharsets.UTF_8));
-
-        ProducerRecord<String, Object> message =
-                new ProducerRecord<>(
-                        "company-search-error",
-                        null,
-                        "key",
-                        "value",
-                        headers);
+        ProducerRecord<String, Object> message = new ProducerRecord<>("company-search-error",
+                        null,"key","value", headers);
 
         ProducerRecord<String, Object> result = underTest.onSend(message);
 

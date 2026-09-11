@@ -1,35 +1,34 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.ERROR_TOPIC;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.INVALID_TOPIC;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.MAIN_TOPIC;
+import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.RETRY_TOPIC;
+
+import consumer.exception.NonRetryableErrorException;
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.service.Service;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants.UPDATE;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.service.ServiceParameters;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.ERROR_TOPIC;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.INVALID_TOPIC;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.MAIN_TOPIC;
-import static uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestUtils.RETRY_TOPIC;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
 @SpringBootTest
@@ -55,7 +54,7 @@ class ConsumerNonRetryableExceptionIT extends AbstractKafkaIntegrationTest {
     @Test
     void testRepublishToInvalidMessageTopicIfNonRetryableExceptionThrown() throws InterruptedException {
         //given
-        doThrow(NonRetryableException.class).when(service).processMessage(any());
+        doThrow(NonRetryableErrorException.class).when(service).processMessage(any());
 
         //when
         testProducer.send(new ProducerRecord<>(MAIN_TOPIC, 0, System.currentTimeMillis(), "key",

@@ -32,7 +32,7 @@ class ResourceChangedDataSerializerTest {
     }
 
     @Test
-    void When_serialize_Expect_resourceChangedDataBytes() {
+    void whenSerializedExpectResourceChangedDataBytes() {
         EventRecord eventRecord = new EventRecord();
         eventRecord.setPublishedAt("2022010351");
         eventRecord.setType("charges");
@@ -43,14 +43,14 @@ class ResourceChangedDataSerializerTest {
     }
 
     @Test
-    void When_serialize_receivesBytes_returnsBytes() {
+    void whenSerializedReceivesBytesReturnsBytes() {
         byte[] byteExample = "Sample bytes".getBytes();
         byte[] serialize = underTest.serialize("", byteExample);
         assertThat(serialize).isEqualTo(byteExample);
     }
 
     @Test
-    void When_serializeFails_throwsNonRetryableError() {
+    void whenSerializedFailsThrowsNonRetryableError() {
         Object payload = mock(Object.class);
         when(payload.toString()).thenThrow(new RuntimeException());
         assertThrows(NonRetryableErrorException.class, () -> underTest.serialize("", payload));

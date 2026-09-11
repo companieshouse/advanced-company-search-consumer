@@ -8,13 +8,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import consumer.exception.NonRetryableErrorException;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.mapper.CompanyProfileMapper;
 import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -156,7 +156,7 @@ class AdvancedIndexUpsertServiceTest {
 
     @Test
     void shouldNotCallApiWhenDeserialisationFails() {
-        NonRetryableException exception = new NonRetryableException("Unable to deserialise company profile", null);
+        NonRetryableErrorException exception = new NonRetryableErrorException("Unable to deserialise company profile", null);
 
         when(mapper.mapToCompanyProfile(anyString())).thenThrow(exception);
 

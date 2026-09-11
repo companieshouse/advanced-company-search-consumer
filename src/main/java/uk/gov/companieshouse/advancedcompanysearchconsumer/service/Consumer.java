@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 
+import consumer.exception.NonRetryableErrorException;
 import java.time.Duration;
 import java.time.Instant;
 import org.jspecify.annotations.NonNull;
@@ -10,9 +11,7 @@ import org.springframework.kafka.retrytopic.DltStrategy;
 import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.logging.DataMapHolder;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
 
@@ -38,7 +37,7 @@ public class Consumer {
             dltTopicSuffix = "-${consumer.group_id}-error",
             dltStrategy = DltStrategy.FAIL_ON_ERROR,
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
-            exclude = NonRetryableException.class
+            exclude = NonRetryableErrorException.class
     )
     @KafkaListener(
             id = "${consumer.topic}-consumer",

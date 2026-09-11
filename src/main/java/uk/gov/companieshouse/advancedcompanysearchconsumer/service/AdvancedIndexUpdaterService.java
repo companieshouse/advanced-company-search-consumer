@@ -3,10 +3,9 @@ package uk.gov.companieshouse.advancedcompanysearchconsumer.service;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.logging.LoggingUtils.getLogMap;
 import static uk.gov.companieshouse.advancedcompanysearchconsumer.logging.LoggingUtils.getRootCause;
 
+import consumer.exception.NonRetryableErrorException;
+import consumer.exception.RetryableErrorException;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.logging.Logger;
 
@@ -63,12 +62,12 @@ public class AdvancedIndexUpdaterService implements Service {
 
         } catch (ApiErrorResponseException apiException) {
             logger.error(String.format("Error response from INTERNAL API: %s", apiException));
-            throw new RetryableException("Attempting to retry due to failed API response", apiException);
+            throw new RetryableErrorException("Attempting to retry due to failed API response", apiException);
 
         } catch (Exception exception) {
             final var rootCause = getRootCause(exception);
             logger.error(String.format("NonRetryable Error: %s", rootCause));
-            throw new NonRetryableException("AdvancedIndexUpdaterService.processMessage: ", rootCause);
+            throw new NonRetryableErrorException("AdvancedIndexUpdaterService.processMessage: ", exception);
         }
     }
 }

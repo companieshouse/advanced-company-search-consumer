@@ -10,14 +10,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import consumer.exception.NonRetryableErrorException;
+import consumer.exception.RetryableErrorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.NonRetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.EventRecord;
@@ -86,7 +85,7 @@ class AdvancedIndexUpdaterServiceTest {
     void shouldThrowNonRetryableExceptionWhenMessageTypeIsUnknown() throws Exception {
         when(event.getType()).thenReturn("unknown");
 
-        NonRetryableException exception = assertThrows(NonRetryableException.class,
+        NonRetryableErrorException exception = assertThrows(NonRetryableErrorException.class,
                 () -> service.processMessage(parameters)
         );
 
@@ -106,7 +105,7 @@ class AdvancedIndexUpdaterServiceTest {
                 .when(advancedIndexUpsertService)
                 .upsertCompanyProfileService(message);
 
-        RetryableException exception = assertThrows(RetryableException.class,
+        RetryableErrorException exception = assertThrows(RetryableErrorException.class,
                 () -> service.processMessage(parameters)
         );
 
@@ -126,7 +125,7 @@ class AdvancedIndexUpdaterServiceTest {
                 .when(advancedIndexDeleteService)
                 .deleteCompanyFromAdvancedIndex("12345678");
 
-        RetryableException exception = assertThrows(RetryableException.class,
+        RetryableErrorException exception = assertThrows(RetryableErrorException.class,
                 () -> service.processMessage(parameters)
         );
 
@@ -146,7 +145,7 @@ class AdvancedIndexUpdaterServiceTest {
                 .when(advancedIndexUpsertService)
                 .upsertCompanyProfileService(message);
 
-        NonRetryableException exception = assertThrows(NonRetryableException.class,
+        NonRetryableErrorException exception = assertThrows(NonRetryableErrorException.class,
                 () -> service.processMessage(parameters)
         );
 
@@ -165,7 +164,7 @@ class AdvancedIndexUpdaterServiceTest {
                 .when(advancedIndexDeleteService)
                 .deleteCompanyFromAdvancedIndex("12345678");
 
-        NonRetryableException exception = assertThrows(NonRetryableException.class,
+        NonRetryableErrorException exception = assertThrows(NonRetryableErrorException.class,
                 () -> service.processMessage(parameters)
         );
 

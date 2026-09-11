@@ -21,7 +21,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableTopicErrorInterceptor;
+import uk.gov.companieshouse.advancedcompanysearchconsumer.service.RetryableTopicErrorInterceptor;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.serialization.ResourceChangedDataDeserializer;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.serialization.ResourceChangedDataSerializer;
 import uk.gov.companieshouse.logging.Logger;

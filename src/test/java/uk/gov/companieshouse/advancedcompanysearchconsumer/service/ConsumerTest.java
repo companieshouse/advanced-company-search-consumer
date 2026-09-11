@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import consumer.exception.RetryableErrorException;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.exception.RetryableException;
-import uk.gov.companieshouse.advancedcompanysearchconsumer.util.ServiceParameters;
 import uk.gov.companieshouse.advancedcompanysearchconsumer.utils.TestConstants;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.stream.ResourceChangedData;
@@ -57,12 +56,12 @@ class ConsumerTest {
 
     @Test
     void shouldSetRetryableFlagAndRethrowRetryableException() {
-        RetryableException retryableException = new RetryableException("Retryable error", null);
+        RetryableErrorException retryableException = new RetryableErrorException("Retryable error", null);
 
         ServiceParameters parameters = new ServiceParameters(payload);
         doThrow(retryableException).when(service).processMessage(parameters);
 
-        RetryableException thrownException = assertThrows(RetryableException.class,
+        RetryableErrorException thrownException = assertThrows(RetryableErrorException.class,
                 () -> consumer.consume(message)
         );
 

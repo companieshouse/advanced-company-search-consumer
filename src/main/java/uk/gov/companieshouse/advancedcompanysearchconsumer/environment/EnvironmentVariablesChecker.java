@@ -34,12 +34,14 @@ public class EnvironmentVariablesChecker {
      * @return <code>true</code> if all required environment variables have been set, <code>false</code> otherwise
      */
     public static boolean allRequiredEnvironmentVariablesPresent() {
+        LOGGER.info("Checking all environment variables present");
+
         EnvironmentReader environmentReader = new EnvironmentReaderImpl();
         var allVariablesPresent = true;
-        LOGGER.info("Checking all environment variables present");
         for(RequiredEnvironmentVariables param : RequiredEnvironmentVariables.values()) {
             try{
                 environmentReader.getMandatoryString(param.getName());
+
             } catch (EnvironmentVariableException eve) {
                 allVariablesPresent = false;
                 LOGGER.error(String.format("Required config item %s missing", param.getName()));
