@@ -234,7 +234,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-server-common</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
