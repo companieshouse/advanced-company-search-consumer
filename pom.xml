@@ -112,26 +112,26 @@
             </dependency>
 
             <!-- Transitive Dependencies: CVE-2026-41115 -->
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-server</artifactId>
-                <version>${kafka-server.version}</version>
-                <scope>runtime</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.kafka</groupId>-->
+<!--                <artifactId>kafka-server</artifactId>-->
+<!--                <version>${kafka-server.version}</version>-->
+<!--                <scope>runtime</scope>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-server-common</artifactId>
-                <version>${kafka-server.version}</version>
-                <scope>runtime</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.kafka</groupId>-->
+<!--                <artifactId>kafka-server-common</artifactId>-->
+<!--                <version>${kafka-server.version}</version>-->
+<!--                <scope>runtime</scope>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-streams-test-utils</artifactId>
-                <version>${kafka-server.version}</version>
-                <scope>test</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.kafka</groupId>-->
+<!--                <artifactId>kafka-streams-test-utils</artifactId>-->
+<!--                <version>${kafka-server.version}</version>-->
+<!--                <scope>test</scope>-->
+<!--            </dependency>-->
 
         </dependencies>
     </dependencyManagement>
@@ -218,13 +218,13 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-webmvc-test</artifactId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-kafka-test</artifactId>
         </dependency>
 
         <dependency>
