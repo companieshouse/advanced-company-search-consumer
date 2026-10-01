@@ -53,6 +53,10 @@
         <system-lambda.version>1.2.1</system-lambda.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
 
+        <!-- Transitive Dependencies -->
+        <kafka-server.version>4.3.1</kafka-server.version>
+
+
         <jib-maven-plugin.server>416670754337.dkr.ecr.eu-west-2.amazonaws.com</jib-maven-plugin.server>
 
         <!-- Sonar Exclusions -->
@@ -105,6 +109,21 @@
                 <version>${test-containers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Transitive Dependencies: CVE-2026-41115 -->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-server</artifactId>
+                <version>${kafka-server.version}</version>
+                <scope>test</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams-test-utils</artifactId>
+                <version>${kafka-server.version}</version>
+                <scope>test</scope>
             </dependency>
 
         </dependencies>
