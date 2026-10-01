@@ -43,11 +43,10 @@
 
         <!-- Internal Dependencies -->
         <ch-boms.version>0.1.27</ch-boms.version>
-        <private-api-sdk-java.version>7.2.22</private-api-sdk-java.version>
+        <private-api-sdk-java.version>7.2.29</private-api-sdk-java.version>
 
         <!-- 3rd Party Dependencies -->
         <avro.version>1.12.1</avro.version>
-        <lz4-java.version>1.12.0</lz4-java.version>
 
         <!-- Testing -->
         <test-containers.version>1.21.4</test-containers.version>
